@@ -1,6 +1,7 @@
 package com.fredande.rewardsappbackend.controller;
 
 import com.fredande.rewardsappbackend.dto.UserResponse;
+import com.fredande.rewardsappbackend.enums.Role;
 import com.fredande.rewardsappbackend.model.User;
 import com.fredande.rewardsappbackend.repository.UserRepository;
 import com.fredande.rewardsappbackend.testUtils.TestUtils;
@@ -41,7 +42,7 @@ class UserControllerIT {
 
     @BeforeAll
     void beforeAll() {
-        TestUtils.registerUser(testRestTemplate, port, VALID_EMAIL, VALID_PASSWORD); // Create a user in the database, to use in the tests
+        TestUtils.registerUser(testRestTemplate, port, VALID_EMAIL, VALID_PASSWORD, Role.PARENT); // Create a user in the database, to use in the tests
     }
 
     // With JWT token generation and validation
