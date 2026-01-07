@@ -87,7 +87,7 @@ public class AuthenticationServiceImpl implements AuthenticationServiceDef {
     @Override
     public void registerChild(ChildRegistrationRequest request,
                               CustomUserDetails userDetails) {
-        if (userRepository.findByEmailOrUserName(
+        if (userRepository.findByEmailOrUsername(
                         request.getUsername(),
                         request.getUsername())
                 .isPresent()) {
