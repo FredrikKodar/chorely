@@ -43,7 +43,7 @@ public class TaskService {
         return TaskMapper.INSTANCE.taskToTaskSavedResponse(task);
     }
 
-    @PreAuthorize("hasAuthority('PARENT')")
+    @PreAuthorize("hasRole('PARENT')")
     public TaskSavedResponse createTaskOnChildByChildId(TaskCreationRequest taskCreationRequest,
                                                         CustomUserDetails userDetails,
                                                         Integer childId) {
@@ -62,8 +62,8 @@ public class TaskService {
         return TaskMapper.INSTANCE.taskToTaskSavedResponse(task);
     }
 
-    @PreAuthorize("hasAuthority('PARENT') or hasAuthority('CHILD')")
-    public @Nullable List<TaskReadResponse> getAllTasksByUser(CustomUserDetails userDetails) {
+    @PreAuthorize("hasRole('PARENT') or hasRole('CHILD')")
+    public List<TaskReadResponse> getAllTasksByUser(CustomUserDetails userDetails) {
         return taskRepository.findByUser(userRepository.findById(userDetails.getId()).orElseThrow())
                 .stream()
                 .map(TaskMapper.INSTANCE::taskToTaskReadResponse)
@@ -101,7 +101,7 @@ public class TaskService {
         return TaskMapper.INSTANCE.taskToTaskReadResponse(savedTask);
     }
 
-    @PreAuthorize("hasAuthority('PARENT') or hasAuthority('CHILD')")
+    @PreAuthorize("hasRole('PARENT') or hasRole('CHILD')")
     public TaskReadResponse getTaskByIdAndUser(Integer id, CustomUserDetails userDetails) {
         User user = userRepository.findById(userDetails.getId()).orElseThrow();
         Task savedTask = taskRepository.findByIdAndUser(id, user).orElse(null);

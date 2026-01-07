@@ -40,7 +40,7 @@ public class UserService {
         return UserMapper.INSTANCE.userToUserResponse(user);
     }
 
-    @PreAuthorize("hasAuthority('PARENT')")
+    @PreAuthorize("hasRole('PARENT')")
     public ChildResponse registerChild(ChildRegistrationRequest request, CustomUserDetails userDetails) {
         User child = new User();
         User parent = userRepository.findById(userDetails.getId()).orElseThrow(EntityNotFoundException::new);
