@@ -21,11 +21,14 @@ public class CustomUserDetails implements UserDetails {
     // TODO Subject to change when implementing Role
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(String.valueOf(user.getRole())));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
     }
 
     @Override
-    public @Nullable String getPassword() {
+    public String getPassword() {
+        if (user.getPassword().isEmpty()) {
+            return "";
+        }
         return user.getPassword();
     }
 
