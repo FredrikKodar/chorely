@@ -57,10 +57,12 @@ public class TaskService {
         task.setDescription(taskCreationRequest.description());
         task.setPoints(taskCreationRequest.points());
         task.setUser(child);
+        task.setCreatedBy(parent);
         taskRepository.save(task);
         return TaskMapper.INSTANCE.taskToTaskSavedResponse(task);
     }
 
+    @PreAuthorize("hasAuthority('PARENT') or hasAuthority('CHILD')")
     public @Nullable List<TaskReadResponse> getAllTasksByUser(CustomUserDetails userDetails) {
         return taskRepository.findByUser(userRepository.findById(userDetails.getId()).orElseThrow())
                 .stream()
@@ -99,6 +101,7 @@ public class TaskService {
         return TaskMapper.INSTANCE.taskToTaskReadResponse(savedTask);
     }
 
+    @PreAuthorize("hasAuthority('PARENT') or hasAuthority('CHILD')")
     public TaskReadResponse getTaskByIdAndUser(Integer id, CustomUserDetails userDetails) {
         User user = userRepository.findById(userDetails.getId()).orElseThrow();
         Task savedTask = taskRepository.findByIdAndUser(id, user).orElse(null);
