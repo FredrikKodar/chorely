@@ -2,7 +2,7 @@ package com.fredande.rewardsappbackend.dto;
 
 import jakarta.validation.constraints.*;
 
-public class RegistrationRequest {
+public class ParentRegistrationRequest {
 
     private final int minPasswordLength = 8;
     private final int maxPasswordLength = 40;
@@ -17,10 +17,10 @@ public class RegistrationRequest {
             message = "Password must be " + minPasswordLength + " to " + maxPasswordLength + " characters")
     private String password;
 
-    public RegistrationRequest() {
+    public ParentRegistrationRequest() {
     }
 
-    public RegistrationRequest(String email, String password) {
+    public ParentRegistrationRequest(String email, String password) {
         this.email = email;
         this.password = password;
     }
