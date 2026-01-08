@@ -1,10 +1,7 @@
 package com.fredande.rewardsappbackend.service;
 
 import com.fredande.rewardsappbackend.CustomUserDetails;
-import com.fredande.rewardsappbackend.dto.ChildRegistrationRequest;
-import com.fredande.rewardsappbackend.dto.ChildResponse;
 import com.fredande.rewardsappbackend.dto.UserResponse;
-import com.fredande.rewardsappbackend.enums.Role;
 import com.fredande.rewardsappbackend.enums.TaskStatus;
 import com.fredande.rewardsappbackend.mapper.UserMapper;
 import com.fredande.rewardsappbackend.model.User;
@@ -22,6 +19,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    @PreAuthorize("hasRole('PARENT')")
     public void updatePoints(Integer userId, Integer points, TaskStatus status) {
         User savedUser = userRepository.findById(userId).orElseThrow();
         if (status.equals(TaskStatus.APPROVED)) {
@@ -34,6 +32,7 @@ public class UserService {
         userRepository.save(savedUser);
     }
 
+    @PreAuthorize("hasRole('PARENT') or hasRole('CHILD')")
     public UserResponse getUserById(Integer id, CustomUserDetails userDetails) {
         User user = userRepository.findById(userDetails.getId()).orElseThrow(EntityNotFoundException::new);
         if (!id.equals(user.getId())) {
