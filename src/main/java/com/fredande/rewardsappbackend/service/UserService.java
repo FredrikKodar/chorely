@@ -42,14 +42,4 @@ public class UserService {
         return UserMapper.INSTANCE.userToUserResponse(user);
     }
 
-    @PreAuthorize("hasRole('PARENT')")
-    public ChildResponse registerChild(ChildRegistrationRequest request, CustomUserDetails userDetails) {
-        User child = new User();
-        User parent = userRepository.findById(userDetails.getId()).orElseThrow(EntityNotFoundException::new);
-        child.setFirstName(request.getFirstName());
-        child.setParent(parent);
-        child.setRole(Role.CHILD);
-        return UserMapper.INSTANCE.userToChildResponse(userRepository.save(child));
-    }
-
 }
