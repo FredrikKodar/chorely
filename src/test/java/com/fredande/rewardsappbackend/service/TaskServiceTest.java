@@ -138,6 +138,69 @@ class TaskServiceTest {
     }
 
     /**
+     * A user should be able to toggle between ASSIGNED and PENDING_APPROVAL.
+     */
+    @Test
+    void update_toggleStatus_valid() throws BadRequestException {
+        // Arrange
+        String original_title = "This is the title";
+        String original_description = "Here is the description";
+        Integer points = 10;
+        User user = new User();
+        Integer user_id = 1;
+        user.setId(user_id);
+        Task task = new Task();
+        Integer task_id = 1;
+        task.setTitle(original_title);
+        task.setDescription(original_description);
+        task.setPoints(points);
+        task.setId(task_id);
+        task.setUser(user);
+        CustomUserDetails userDetails = new CustomUserDetails(user);
+        when(taskRepository.findById(task_id)).thenReturn(Optional.of(task));
+        when(userRepository.findById(user_id)).thenReturn(Optional.of(user));
+
+        // Act
+        var response = taskService.toggleStatus(1, userDetails);
+
+        //Assert
+        assertEquals(PENDING_APPROVAL, response.status());
+        verify(taskRepository).findById(any(Integer.class));
+        verify(userRepository).findById(any(Integer.class));
+        verify(taskRepository).save(any(Task.class));
+    }
+
+    /**
+     * If a user tries to toggle the status on a Task with APPROVED status, an Exception should be thrown.
+     */
+    @Test
+    void update_toggleStatus_invalid_throwsBadRequestException() {
+        // Arrange
+        String original_title = "This is the title";
+        String original_description = "Here is the description";
+        Integer points = 10;
+        User user = new User();
+        Integer user_id = 1;
+        user.setId(user_id);
+        Task task = new Task();
+        Integer task_id = 1;
+        task.setTitle(original_title);
+        task.setDescription(original_description);
+        task.setPoints(points);
+        task.setId(task_id);
+        task.setUser(user);
+        task.setStatus(APPROVED);
+        CustomUserDetails userDetails = new CustomUserDetails(user);
+        when(taskRepository.findById(task_id)).thenReturn(Optional.of(task));
+        when(userRepository.findById(user_id)).thenReturn(Optional.of(user));
+
+        // Act & Assert
+        assertThrows(BadRequestException.class, () -> taskService.toggleStatus(1, userDetails));
+        verify(taskRepository).findById(any(Integer.class));
+        verify(userRepository).findById(any(Integer.class));
+    }
+
+    /**
      * A valid method call should return a TaskReadResponse DTO.
      */
     @Test
