@@ -34,6 +34,7 @@ public class TaskService {
         this.userService = userService;
     }
 
+    @PreAuthorize("hasRole('PARENT')")
     public TaskSavedResponse createTaskOnParent(TaskCreationRequest taskCreationRequest, CustomUserDetails userDetails) {
         User user = new User();
         user.setId(userDetails.getId());
