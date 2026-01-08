@@ -11,7 +11,6 @@ import com.fredande.rewardsappbackend.model.User;
 import com.fredande.rewardsappbackend.repository.TaskRepository;
 import com.fredande.rewardsappbackend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.jspecify.annotations.Nullable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +42,7 @@ public class TaskService {
         return TaskMapper.INSTANCE.taskToTaskSavedResponse(task);
     }
 
-    @PreAuthorize("hasAuthority('PARENT')")
+    @PreAuthorize("hasRole('PARENT')")
     public TaskSavedResponse createTaskOnChildByChildId(TaskCreationRequest taskCreationRequest,
                                                         CustomUserDetails userDetails,
                                                         Integer childId) {
@@ -57,11 +56,13 @@ public class TaskService {
         task.setDescription(taskCreationRequest.description());
         task.setPoints(taskCreationRequest.points());
         task.setUser(child);
+        task.setCreatedBy(parent);
         taskRepository.save(task);
         return TaskMapper.INSTANCE.taskToTaskSavedResponse(task);
     }
 
-    public @Nullable List<TaskReadResponse> getAllTasksByUser(CustomUserDetails userDetails) {
+    @PreAuthorize("hasRole('PARENT') or hasRole('CHILD')")
+    public List<TaskReadResponse> getAllTasksByUser(CustomUserDetails userDetails) {
         return taskRepository.findByUser(userRepository.findById(userDetails.getId()).orElseThrow())
                 .stream()
                 .map(TaskMapper.INSTANCE::taskToTaskReadResponse)
@@ -99,6 +100,7 @@ public class TaskService {
         return TaskMapper.INSTANCE.taskToTaskReadResponse(savedTask);
     }
 
+    @PreAuthorize("hasRole('PARENT') or hasRole('CHILD')")
     public TaskReadResponse getTaskByIdAndUser(Integer id, CustomUserDetails userDetails) {
         User user = userRepository.findById(userDetails.getId()).orElseThrow();
         Task savedTask = taskRepository.findByIdAndUser(id, user).orElse(null);

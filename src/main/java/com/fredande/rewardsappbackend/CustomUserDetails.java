@@ -1,7 +1,7 @@
 package com.fredande.rewardsappbackend;
 
 import com.fredande.rewardsappbackend.model.User;
-import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,17 +20,26 @@ public class CustomUserDetails implements UserDetails {
 
     // TODO Subject to change when implementing Role
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(String.valueOf(user.getRole())));
+    public @NonNull Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
     }
 
     @Override
-    public @Nullable String getPassword() {
+    public String getPassword() {
+        if (user.getPassword().isEmpty()) {
+            return "";
+        }
         return user.getPassword();
     }
 
     @Override
-    public String getUsername() {
+    public @NonNull String getUsername() {
+        if (user.getEmail() == null) {
+            if (user.getUsername() == null) {
+                return "";
+            }
+            return user.getUsername();
+        }
         return user.getEmail();
     }
 

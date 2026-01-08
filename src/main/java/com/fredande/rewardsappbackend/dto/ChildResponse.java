@@ -5,6 +5,7 @@ import com.fredande.rewardsappbackend.model.User;
 import java.util.List;
 
 public record ChildResponse(Integer id,
+                            String username,
                             String firstName,
                             String lastName,
                             Integer currentPoints,
@@ -12,6 +13,7 @@ public record ChildResponse(Integer id,
                             Integer numTasksOpen,
                             Integer numTasksCompleted,
                             Integer numTasksTotal,
+                            List<User> tasks,
                             List<User> parents) {
 
 }

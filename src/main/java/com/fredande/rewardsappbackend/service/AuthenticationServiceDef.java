@@ -1,6 +1,8 @@
 package com.fredande.rewardsappbackend.service;
 
-import com.fredande.rewardsappbackend.dto.RegistrationRequest;
+import com.fredande.rewardsappbackend.CustomUserDetails;
+import com.fredande.rewardsappbackend.dto.ChildRegistrationRequest;
+import com.fredande.rewardsappbackend.dto.ParentRegistrationRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public interface AuthenticationServiceDef {
@@ -9,6 +11,9 @@ public interface AuthenticationServiceDef {
 
     String generateToken(UserDetails userDetails);
 
-    void register(RegistrationRequest registrationRequest);
+    void registerParent(ParentRegistrationRequest parentRegistrationRequest);
+
+    void registerChild(ChildRegistrationRequest childRegistrationRequest,
+                       CustomUserDetails customUserDetails);
 
 }

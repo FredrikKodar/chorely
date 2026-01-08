@@ -1,7 +1,7 @@
 package com.fredande.rewardsappbackend.controller;
 
 import com.fredande.rewardsappbackend.CustomUserDetails;
-import com.fredande.rewardsappbackend.dto.ChildCreationRequest;
+import com.fredande.rewardsappbackend.dto.ChildRegistrationRequest;
 import com.fredande.rewardsappbackend.dto.ChildResponse;
 import com.fredande.rewardsappbackend.dto.UserResponse;
 import com.fredande.rewardsappbackend.service.UserService;
@@ -21,10 +21,10 @@ public class UserController {
     }
 
     // Create
-    @PostMapping("/add-child")
-    public ResponseEntity<ChildResponse> addChild(@RequestBody @Valid ChildCreationRequest request,
-                                                  @AuthenticationPrincipal CustomUserDetails userDetails) {
-        return ResponseEntity.status(201).body(userService.addChild(request, userDetails));
+    @PostMapping("/register-child")
+    public ResponseEntity<ChildResponse> registerChild(@RequestBody @Valid ChildRegistrationRequest request,
+                                                       @AuthenticationPrincipal CustomUserDetails userDetails) {
+        return ResponseEntity.status(201).body(userService.registerChild(request, userDetails));
     }
 
     @GetMapping("{id}")

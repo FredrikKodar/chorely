@@ -13,7 +13,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String email;
+    private String username;
     private String password;
+    private Long passcode;
     private String firstName;
     private String lastName;
     private Integer currentPoints;
@@ -46,12 +48,28 @@ public class User {
         this.email = email;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String userName) {
+        this.username = userName;
+    }
+
     public String getPassword() {
         return password;
     }
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Long getPasscode() {
+        return passcode;
+    }
+
+    public void setPasscode(Long passcode) {
+        this.passcode = passcode;
     }
 
     public String getFirstName() {

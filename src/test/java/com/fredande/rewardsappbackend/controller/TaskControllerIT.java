@@ -2,6 +2,7 @@ package com.fredande.rewardsappbackend.controller;
 
 import com.fredande.rewardsappbackend.CustomUserDetails;
 import com.fredande.rewardsappbackend.dto.*;
+import com.fredande.rewardsappbackend.enums.Role;
 import com.fredande.rewardsappbackend.model.User;
 import com.fredande.rewardsappbackend.testUtils.TestUtils;
 import jakarta.transaction.Transactional;
@@ -60,7 +61,7 @@ class TaskControllerIT {
 
     @BeforeAll
     void beforeAll() {
-        TestUtils.registerUser(testRestTemplate, port, VALID_EMAIL, VALID_PASSWORD); // Create a user in the database, to use in the tests
+        TestUtils.registerUser(testRestTemplate, port, VALID_EMAIL, VALID_PASSWORD, Role.PARENT); // Create a user in the database, to use in the tests
     }
 
     // With JWT token generation and validation
@@ -117,9 +118,9 @@ class TaskControllerIT {
         HttpEntity<String> postRequest = new HttpEntity<>(
                 objectMapper.writeValueAsString(createdTask),
                 headers);
-        HttpEntity<String> get_request = new HttpEntity<>(
+        HttpEntity<String> getRequest = new HttpEntity<>(
                 headers);
-        ParameterizedTypeReference<List<TaskReadResponse>> response_list = new ParameterizedTypeReference<>() {
+        ParameterizedTypeReference<List<TaskReadResponse>> responseList = new ParameterizedTypeReference<>() {
         };
 
         // Act
@@ -139,8 +140,8 @@ class TaskControllerIT {
                 testRestTemplate.exchange(
                         "http://localhost:" + port + "/api/tasks",
                         HttpMethod.GET,
-                        get_request,
-                        response_list);
+                        getRequest,
+                        responseList);
 
         // Assert
         assertEquals(HttpStatus.CREATED, firstPostResponse.getStatusCode());
@@ -169,7 +170,7 @@ class TaskControllerIT {
         HttpEntity<String> postRequest = new HttpEntity<>(
                 objectMapper.writeValueAsString(createdTask),
                 headers);
-        HttpEntity<String> get_request = new HttpEntity<>(
+        HttpEntity<String> getRequest = new HttpEntity<>(
                 headers);
 
         // Act
@@ -185,7 +186,7 @@ class TaskControllerIT {
                 testRestTemplate.exchange(
                         "http://localhost:" + port + "/api/tasks/" + postResponse.getBody().id(),
                         HttpMethod.GET,
-                        get_request,
+                        getRequest,
                         TaskReadResponse.class);
 
         // Assert
@@ -530,6 +531,7 @@ class TaskControllerIT {
         // Arrange
         User user = new User();
         user.setId(1);
+        user.setRole(Role.PARENT);
         CustomUserDetails userDetails = new CustomUserDetails(user);
         TaskCreationRequest request = new TaskCreationRequest(VALID_TITLE, VALID_DESCRIPTION, VALID_POINTS);
         Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -567,6 +569,7 @@ class TaskControllerIT {
         // Arrange
         User user = new User();
         user.setId(1);
+        user.setRole(Role.PARENT);
         CustomUserDetails userDetails = new CustomUserDetails(user);
         TaskCreationRequest request = new TaskCreationRequest(VALID_TITLE, VALID_DESCRIPTION, VALID_POINTS);
         Authentication authentication = new UsernamePasswordAuthenticationToken(

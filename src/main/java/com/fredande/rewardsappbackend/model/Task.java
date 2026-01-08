@@ -30,6 +30,9 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @ManyToOne
+    @JoinColumn(name = "created_by_id")
+    private User createdBy;
     private boolean done;
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
@@ -46,6 +49,14 @@ public class Task {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 
     public Integer getId() {

@@ -1,12 +1,16 @@
 package com.fredande.rewardsappbackend.service;
 
+import com.fredande.rewardsappbackend.CustomUserDetails;
 import com.fredande.rewardsappbackend.CustomUserDetailsService;
 import com.fredande.rewardsappbackend.JWTService;
-import com.fredande.rewardsappbackend.dto.RegistrationRequest;
+import com.fredande.rewardsappbackend.dto.ChildRegistrationRequest;
+import com.fredande.rewardsappbackend.dto.ParentRegistrationRequest;
+import com.fredande.rewardsappbackend.enums.Role;
 import com.fredande.rewardsappbackend.model.User;
 import com.fredande.rewardsappbackend.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,7 +36,11 @@ public class AuthenticationServiceImpl implements AuthenticationServiceDef {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthenticationServiceImpl(AuthenticationManager authenticationManager, CustomUserDetailsService userDetailsService, JWTService jwtService, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public AuthenticationServiceImpl(AuthenticationManager authenticationManager,
+                                     CustomUserDetailsService userDetailsService,
+                                     JWTService jwtService,
+                                     UserRepository userRepository,
+                                     PasswordEncoder passwordEncoder) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtService = jwtService;
@@ -49,7 +57,7 @@ public class AuthenticationServiceImpl implements AuthenticationServiceDef {
         } catch (AuthenticationException e) {
             throw new BadCredentialsException("Invalid email or password", e);
         }
-        return userDetailsService.loadUserByEmail(username);
+        return userDetailsService.loadUserByUsername(username);
     }
 
     @Override
@@ -65,17 +73,34 @@ public class AuthenticationServiceImpl implements AuthenticationServiceDef {
     }
 
     @Override
-    public void register(RegistrationRequest registrationRequest) {
-        registrationRequest.setPassword(passwordEncoder.encode(registrationRequest.getPassword()));
-        if (userRepository.findByEmail(registrationRequest.getEmail()).isPresent()) {
+    public void registerParent(ParentRegistrationRequest request) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new EntityExistsException("Email already registered");
         }
         User user = new User();
-        user.setPassword(registrationRequest.getPassword());
-        user.setEmail(registrationRequest.getEmail());
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setEmail(request.getEmail());
+        user.setRole(Role.PARENT);
         userRepository.save(user);
     }
 
-    // TODO Add password character restriction and validation
+    @Override
+    public void registerChild(ChildRegistrationRequest request,
+                              CustomUserDetails userDetails) {
+        if (userRepository.findByEmailOrUsername(
+                        request.getUsername(),
+                        request.getUsername())
+                .isPresent()) {
+            throw new EntityExistsException("Username already registered");
+        }
+        User child = new User();
+        User parent = userRepository.findById(userDetails.getId()).orElseThrow(EntityNotFoundException::new);
+        child.setPassword(passwordEncoder.encode(request.getPassword()));
+        child.setUsername(request.getUsername());
+        child.setFirstName(request.getFirstName());
+        child.setParent(parent);
+        child.setRole(Role.CHILD);
+        userRepository.save(child);
+    }
 
 }
