@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.fredande.rewardsappbackend.enums.TaskStatus.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -28,7 +29,7 @@ class UserServiceTest {
     UserService userService;
 
     /**
-     * If a task has been marked done (done==true), the tasks points should be added to the users totalPoints and
+     * If a task status has switched to APPROVED, the tasks points should be added to the users totalPoints and
      * currentPoints.
      */
     @Test
@@ -41,7 +42,7 @@ class UserServiceTest {
         when(userRepository.findById(any(Integer.class))).thenReturn(Optional.of(user));
 
         // Act
-        userService.updatePoints(1, 10, true);
+        userService.updatePoints(1, 10, APPROVED);
         User updatedUser = userRepository.findById(user.getId()).orElse(null);
 
         // Assert
@@ -53,7 +54,7 @@ class UserServiceTest {
     }
 
     /**
-     * If a task has been marked not done (done==false), the tasks points should be retracted from the users totalPoints and
+     * If a task status has switched from PENDING_APPROVAL to ASSIGNED, the tasks points should be retracted from the users totalPoints and
      * currentPoints.
      */
     @Test
@@ -66,7 +67,7 @@ class UserServiceTest {
         when(userRepository.findById(any(Integer.class))).thenReturn(Optional.of(user));
 
         // Act
-        userService.updatePoints(1, 10, false);
+        userService.updatePoints(1, 10, ASSIGNED);
         User updatedUser = userRepository.findById(user.getId()).orElse(null);
 
         // Assert
@@ -86,9 +87,9 @@ class UserServiceTest {
         Task task1 = new Task();
         Task task2 = new Task();
         task1.setUser(user);
-        task1.setDone(false);
+        task1.setStatus(PENDING_APPROVAL);
         task2.setUser(user);
-        task2.setDone(true);
+        task2.setStatus(APPROVED);
         tasks.add(task1);
         tasks.add(task2);
         user.setTasks(tasks);

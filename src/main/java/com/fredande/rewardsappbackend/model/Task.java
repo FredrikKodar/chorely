@@ -33,12 +33,10 @@ public class Task {
     @ManyToOne
     @JoinColumn(name = "created_by_id")
     private User createdBy;
-    private boolean done;
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
 
     public Task() {
-        this.done = false;
         this.points = 0;
         this.status = TaskStatus.ASSIGNED;
     }
@@ -101,14 +99,6 @@ public class Task {
 
     public void setUpdated(Date updated) {
         this.updated = updated;
-    }
-
-    public boolean isDone() {
-        return done;
-    }
-
-    public void setDone(boolean done) {
-        this.done = done;
     }
 
     public TaskStatus getStatus() {

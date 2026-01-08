@@ -2,6 +2,7 @@ package com.fredande.rewardsappbackend.mapper;
 
 import com.fredande.rewardsappbackend.dto.ChildResponse;
 import com.fredande.rewardsappbackend.dto.UserResponse;
+import com.fredande.rewardsappbackend.enums.TaskStatus;
 import com.fredande.rewardsappbackend.model.Task;
 import com.fredande.rewardsappbackend.model.User;
 import org.mapstruct.Mapper;
@@ -26,7 +27,7 @@ public interface UserMapper {
         Integer numTasks = 0;
         List<Task> tasks = user.getTasks();
         for (Task task : tasks) {
-            if (!task.isDone()) {
+            if (!task.getStatus().equals(TaskStatus.APPROVED)) {
                 numTasks++;
             }
         }
@@ -37,7 +38,7 @@ public interface UserMapper {
         Integer numTasks = 0;
         List<Task> tasks = user.getTasks();
         for (Task task : tasks) {
-            if (task.isDone()) {
+            if (task.getStatus().equals(TaskStatus.APPROVED)) {
                 numTasks++;
             }
         }

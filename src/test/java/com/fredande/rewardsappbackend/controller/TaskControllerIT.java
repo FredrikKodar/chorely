@@ -2,7 +2,6 @@ package com.fredande.rewardsappbackend.controller;
 
 import com.fredande.rewardsappbackend.CustomUserDetails;
 import com.fredande.rewardsappbackend.dto.*;
-import com.fredande.rewardsappbackend.enums.Role;
 import com.fredande.rewardsappbackend.model.User;
 import com.fredande.rewardsappbackend.testUtils.TestUtils;
 import jakarta.transaction.Transactional;
@@ -27,6 +26,7 @@ import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;
 
+import static com.fredande.rewardsappbackend.enums.Role.PARENT;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -61,7 +61,7 @@ class TaskControllerIT {
 
     @BeforeAll
     void beforeAll() {
-        TestUtils.registerUser(testRestTemplate, port, VALID_EMAIL, VALID_PASSWORD, Role.PARENT); // Create a user in the database, to use in the tests
+        TestUtils.registerUser(testRestTemplate, port, VALID_EMAIL, VALID_PASSWORD, PARENT); // Create a user in the database, to use in the tests
     }
 
     // With JWT token generation and validation
@@ -415,6 +415,7 @@ class TaskControllerIT {
     void withMockUser_create_valid() throws Exception {
         // Arrange
         User user = new User();
+        user.setRole(PARENT);
         CustomUserDetails userDetails = new CustomUserDetails(user);
         TaskCreationRequest request = new TaskCreationRequest(
                 VALID_TITLE,
@@ -531,7 +532,7 @@ class TaskControllerIT {
         // Arrange
         User user = new User();
         user.setId(1);
-        user.setRole(Role.PARENT);
+        user.setRole(PARENT);
         CustomUserDetails userDetails = new CustomUserDetails(user);
         TaskCreationRequest request = new TaskCreationRequest(VALID_TITLE, VALID_DESCRIPTION, VALID_POINTS);
         Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -569,7 +570,7 @@ class TaskControllerIT {
         // Arrange
         User user = new User();
         user.setId(1);
-        user.setRole(Role.PARENT);
+        user.setRole(PARENT);
         CustomUserDetails userDetails = new CustomUserDetails(user);
         TaskCreationRequest request = new TaskCreationRequest(VALID_TITLE, VALID_DESCRIPTION, VALID_POINTS);
         Authentication authentication = new UsernamePasswordAuthenticationToken(
