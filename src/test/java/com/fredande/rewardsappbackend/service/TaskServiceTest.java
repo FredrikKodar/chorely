@@ -10,7 +10,6 @@ import com.fredande.rewardsappbackend.model.User;
 import com.fredande.rewardsappbackend.repository.TaskRepository;
 import com.fredande.rewardsappbackend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
-import org.apache.coyote.BadRequestException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -142,7 +141,7 @@ class TaskServiceTest {
      * A user should be able to toggle between ASSIGNED and PENDING_APPROVAL.
      */
     @Test
-    void update_toggleStatus_valid() throws BadRequestException {
+    void update_toggleStatus_valid() {
         // Arrange
         String originalTitle = "This is the title";
         String originalDescription = "Here is the description";
@@ -175,7 +174,7 @@ class TaskServiceTest {
      * If a user tries to toggle the status on a Task with APPROVED status, an Exception should be thrown.
      */
     @Test
-    void update_toggleStatus_invalid_throwsBadRequestException() {
+    void update_toggleStatus_invalid_throwsEntityNotFoundException() {
         // Arrange
         String originalTitle = "This is the title";
         String originalDescription = "Here is the description";
@@ -196,7 +195,7 @@ class TaskServiceTest {
         when(userRepository.findById(userId)).thenReturn(Optional.of(user));
 
         // Act & Assert
-        assertThrows(BadRequestException.class, () -> taskService.toggleStatus(1, userDetails));
+        assertThrows(EntityNotFoundException.class, () -> taskService.toggleStatus(1, userDetails));
         verify(taskRepository).findById(any(Integer.class));
         verify(userRepository).findById(any(Integer.class));
     }
@@ -250,9 +249,78 @@ class TaskServiceTest {
         when(taskRepository.findByIdAndUser(taskId, user1)).thenReturn(Optional.empty());
 
         // Act & Assert
-        assertThrows(EntityNotFoundException.class, () -> taskService.getTaskByIdAndUser(taskId, userDetails));
+        var exception = assertThrows(EntityNotFoundException.class, () -> taskService.getTaskByIdAndUser(taskId, userDetails));
+        assertEquals("User-task mismatch", exception.getMessage());
         verify(userRepository).findById(any(Integer.class));
         verify(taskRepository).findByIdAndUser(any(Integer.class), any(User.class));
+    }
+
+    /**
+     * Changing the status of a task to APPROVED should update user points.
+     */
+    @Test
+    void update_approve_valid() {
+        // Arrange
+        String title = "This is the title";
+        String description = "Here is the description";
+        User user = new User();
+        User createdBy = new User();
+        createdBy.setId(2);
+        CustomUserDetails userDetails = new CustomUserDetails(createdBy);
+        user.setId(1);
+        user.setTotalPoints(100);
+        user.setCurrentPoints(10);
+        Task task = new Task();
+        task.setId(1);
+        task.setUser(user);
+        task.setPoints(10);
+        task.setCreatedBy(user);
+        task.setTitle(title);
+        task.setDescription(description);
+        when(taskRepository.findByIdAndCreatedBy(any(Integer.class), any(User.class))).thenReturn(Optional.of(task));
+        when(userRepository.findById(any(Integer.class))).thenReturn(Optional.of(user));
+
+        // Act
+        var response = taskService.approve(task.getId(), userDetails);
+
+        // Assert
+        assertEquals(APPROVED, response.status());
+        assertNotNull(response.updated());
+        verify(taskRepository).findByIdAndCreatedBy(any(Integer.class), any(User.class));
+        verify(userRepository).findById(any(Integer.class));
+        verify(taskRepository).save(any(Task.class));
+
+    }
+
+    /**
+     * Trying to change the status on a task when the user is not the creator should throw EntityNotFoundException.
+     */
+    @Test
+    void update_approve_invalid_wrongUser() {
+        // Arrange
+        User user = new User();
+        User createdBy = new User();
+        User wrongUser = new User();
+        user.setId(1);
+        createdBy.setId(2);
+        wrongUser.setId(3);
+        CustomUserDetails userDetails = new CustomUserDetails(wrongUser);
+        user.setTotalPoints(100);
+        user.setCurrentPoints(10);
+        Task task = new Task();
+        task.setId(1);
+        task.setUser(user);
+        task.setPoints(10);
+        task.setCreatedBy(createdBy);
+        when(userRepository.findById(wrongUser.getId())).thenReturn(Optional.of(wrongUser));
+        when(taskRepository.findByIdAndCreatedBy(task.getId(), wrongUser)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        var exception = assertThrows(EntityNotFoundException.class, () -> taskService.approve(task.getId(), userDetails));
+        assertEquals("User-task mismatch", exception.getMessage());
+        verify(taskRepository).findByIdAndCreatedBy(any(Integer.class), any(User.class));
+        verify(userRepository).findById(any(Integer.class));
+
     }
 
 }
