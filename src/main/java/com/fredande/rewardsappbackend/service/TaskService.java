@@ -126,13 +126,16 @@ public class TaskService {
         return TaskMapper.INSTANCE.taskToTaskReadResponse(savedTask);
     }
 
-    @PreAuthorize("hasRole('PARENT') or hasRole('CHILD')")
-    public TaskReadResponse getTaskByIdAndUser(Integer id, CustomUserDetails userDetails) {
-        User user = userRepository.findById(userDetails.getId()).orElseThrow();
-        Task savedTask = taskRepository.findByIdAndUser(id, user).orElse(null);
-        if (savedTask == null) {
-            throw new EntityNotFoundException("User-task mismatch");
-        }
+    @PreAuthorize("hasRole('PARENT')")
+    public TaskReadResponse approve(Integer id, CustomUserDetails userDetails) {
+        User createdBy = userRepository.findById(userDetails.getId())
+                .orElseThrow(() -> new EntityNotFoundException("User not found"));
+        Task savedTask = taskRepository.findByIdAndCreatedBy(id, createdBy)
+                .orElseThrow(() -> new EntityNotFoundException("User-task mismatch"));
+        savedTask.setStatus(APPROVED);
+        savedTask.setUpdated(new Date());
+        userService.updatePoints(savedTask.getUser().getId(), savedTask.getPoints(), APPROVED);
+        taskRepository.save(savedTask);
         return TaskMapper.INSTANCE.taskToTaskReadResponse(savedTask);
     }
 
