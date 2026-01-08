@@ -107,7 +107,7 @@ class TaskServiceTest {
         String updated_title = "This is the new title";
         String updated_description = "Here is the new description";
         Integer updated_points = 100;
-        boolean updated_done = true;
+        TaskStatus updated_done = APPROVED;
         Integer points = 10;
         User user = new User();
         Integer user_id = 1;

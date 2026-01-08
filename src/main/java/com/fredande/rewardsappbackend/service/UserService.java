@@ -5,6 +5,7 @@ import com.fredande.rewardsappbackend.dto.ChildRegistrationRequest;
 import com.fredande.rewardsappbackend.dto.ChildResponse;
 import com.fredande.rewardsappbackend.dto.UserResponse;
 import com.fredande.rewardsappbackend.enums.Role;
+import com.fredande.rewardsappbackend.enums.TaskStatus;
 import com.fredande.rewardsappbackend.mapper.UserMapper;
 import com.fredande.rewardsappbackend.model.User;
 import com.fredande.rewardsappbackend.repository.UserRepository;
@@ -21,15 +22,16 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void updatePoints(Integer userId, Integer points, boolean done) {
+    public void updatePoints(Integer userId, Integer points, TaskStatus status) {
         User savedUser = userRepository.findById(userId).orElseThrow();
-        if (done) {
+        if (status.equals(TaskStatus.APPROVED)) {
             savedUser.setCurrentPoints(savedUser.getCurrentPoints() + points);
             savedUser.setTotalPoints(savedUser.getTotalPoints() + points);
         } else {
             savedUser.setCurrentPoints(savedUser.getCurrentPoints() - points);
             savedUser.setTotalPoints(savedUser.getTotalPoints() - points);
         }
+        userRepository.save(savedUser);
     }
 
     public UserResponse getUserById(Integer id, CustomUserDetails userDetails) {

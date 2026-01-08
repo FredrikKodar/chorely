@@ -1,5 +1,6 @@
 package com.fredande.rewardsappbackend.dto;
 
+import com.fredande.rewardsappbackend.enums.TaskStatus;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import org.jspecify.annotations.Nullable;
@@ -14,6 +15,6 @@ public record TaskUpdateRequest(@Size(min = 8, max = 140, message = "Title must 
                                 @Nullable
                                 Integer points,
                                 @Nullable
-                                Boolean done) {
+                                TaskStatus status) {
 
 }

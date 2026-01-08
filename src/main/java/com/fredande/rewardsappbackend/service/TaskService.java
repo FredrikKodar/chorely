@@ -88,10 +88,11 @@ public class TaskService {
             updated = true;
             savedTask.setPoints(updatedTask.points());
         }
-        if (updatedTask.done() != null && savedTask.isDone() != (updatedTask.done())) {
+        if (updatedTask.status() != null &&
+                savedTask.getStatus() != updatedTask.status()) {
             updated = true;
-            savedTask.setDone(updatedTask.done());
-            userService.updatePoints(user.getId(), savedTask.getPoints(), updatedTask.done());
+            savedTask.setStatus(updatedTask.status());
+            userService.updatePoints(user.getId(), savedTask.getPoints(), updatedTask.status());
         }
         if (updated) {
             savedTask.setUpdated(new Date());
