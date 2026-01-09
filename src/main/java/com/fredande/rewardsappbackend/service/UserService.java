@@ -25,9 +25,12 @@ public class UserService {
     @PreAuthorize("hasRole('PARENT')")
     public List<UserIdAndFirstNameResponse> getChildren(CustomUserDetails userDetails) {
         User user = userRepository.findById(userDetails.getId()).orElseThrow(EntityNotFoundException::new);
-        return userRepository.findAllByParent(user).stream().map(
-                UserMapper.INSTANCE::userToUserIdAndFirstNameResponse
-        ).toList();
+        return userRepository.findAllByParent(user)
+                .stream()
+                .map(
+                        UserMapper.INSTANCE::userToUserIdAndFirstNameResponse
+                )
+                .toList();
     }
 
     @PreAuthorize("hasRole('PARENT')")
