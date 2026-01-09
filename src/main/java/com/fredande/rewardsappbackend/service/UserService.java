@@ -1,6 +1,7 @@
 package com.fredande.rewardsappbackend.service;
 
 import com.fredande.rewardsappbackend.CustomUserDetails;
+import com.fredande.rewardsappbackend.dto.UserIdAndFirstNameResponse;
 import com.fredande.rewardsappbackend.dto.UserResponse;
 import com.fredande.rewardsappbackend.enums.TaskStatus;
 import com.fredande.rewardsappbackend.mapper.UserMapper;
@@ -10,6 +11,8 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -17,6 +20,14 @@ public class UserService {
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @PreAuthorize("hasRole('PARENT')")
+    public List<UserIdAndFirstNameResponse> getChildren(CustomUserDetails userDetails) {
+        User user = userRepository.findById(userDetails.getId()).orElseThrow(EntityNotFoundException::new);
+        return userRepository.findAllByParent(user).stream().map(
+                UserMapper.INSTANCE::userToUserIdAndFirstNameResponse
+        ).toList();
     }
 
     @PreAuthorize("hasRole('PARENT')")
