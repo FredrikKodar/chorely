@@ -1,5 +1,6 @@
 package com.fredande.rewardsappbackend.mapper;
 
+import com.fredande.rewardsappbackend.dto.UserIdAndFirstNameResponse;
 import com.fredande.rewardsappbackend.dto.ChildResponse;
 import com.fredande.rewardsappbackend.dto.UserResponse;
 import com.fredande.rewardsappbackend.enums.TaskStatus;
@@ -17,6 +18,8 @@ public interface UserMapper {
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
     ChildResponse userToChildResponse(User user);
+
+    UserIdAndFirstNameResponse userToUserIdAndFirstNameResponse(User user);
 
     @Mapping(target = "numTasksOpen", expression = "java(getNumOpenTasks(user))")
     @Mapping(target = "numTasksCompleted", expression = "java(getNumCompletedTasks(user))")
