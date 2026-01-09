@@ -11,6 +11,7 @@ import com.fredande.rewardsappbackend.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -252,6 +253,43 @@ class TaskServiceTest {
 
         // Assert
         assertEquals("User-task mismatch", exception.getMessage());
+        verify(taskRepository).findByIdAndCreatedBy(any(Integer.class), any(User.class));
+        verify(userRepository).findById(any(Integer.class));
+
+    }
+
+    /**
+     * Setting the status to APPROVED should pass.
+     */
+    @Test
+    void update_approve_valid() {
+        // Arrange
+        User user = new User();
+        User createdBy = new User();
+        user.setId(1);
+        createdBy.setId(2);
+        CustomUserDetails userDetails = new CustomUserDetails(createdBy);
+        user.setTotalPoints(100);
+        user.setCurrentPoints(10);
+        Task task = new Task();
+        task.setId(1);
+        task.setUser(user);
+        task.setPoints(10);
+        task.setCreatedBy(createdBy);
+        task.setTitle("Test title");
+        task.setDescription("Test description");
+        task.setStatus(PENDING_APPROVAL);
+        ArgumentCaptor<Task> taskCaptor = ArgumentCaptor.forClass(Task.class);
+        when(userRepository.findById(createdBy.getId())).thenReturn(Optional.of(createdBy));
+        when(taskRepository.findByIdAndCreatedBy(task.getId(), createdBy)).thenReturn(Optional.of(task));
+
+        // Act
+        var response = taskService.approve(task.getId(), userDetails);
+
+        // Assert
+        verify(taskRepository).save(taskCaptor.capture());
+        assertEquals(APPROVED, taskCaptor.getValue().getStatus());
+        assertNotNull(response.updated());
         verify(taskRepository).findByIdAndCreatedBy(any(Integer.class), any(User.class));
         verify(userRepository).findById(any(Integer.class));
 
