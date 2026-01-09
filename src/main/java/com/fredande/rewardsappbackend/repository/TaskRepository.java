@@ -1,5 +1,6 @@
 package com.fredande.rewardsappbackend.repository;
 
+import com.fredande.rewardsappbackend.enums.TaskStatus;
 import com.fredande.rewardsappbackend.model.Task;
 import com.fredande.rewardsappbackend.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,5 +20,7 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     Optional<Task> findByIdAndUser(@Param("taskId") Integer taskId, @Param("userId") User user);
 
     Optional<Task> findByIdAndCreatedBy(Integer id, User user);
+
+    List<Task> findAllByCreatedByAndStatus(User user, TaskStatus taskStatus);
 
 }
