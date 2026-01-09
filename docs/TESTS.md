@@ -123,6 +123,7 @@ request/response cycle, including generation and validation of JWT tokens.
 - ✅ Create task for child
 - ✅ Get all tasks by user
 - ✅ Get task by ID
+- ✅ Get tasks with status PENDING_APPROVAL
 - ✅ Update task
 - ✅ Toggle task status (child)
 - ✅ Approve task (parent)
