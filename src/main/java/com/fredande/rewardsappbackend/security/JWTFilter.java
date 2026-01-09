@@ -1,5 +1,6 @@
-package com.fredande.rewardsappbackend;
+package com.fredande.rewardsappbackend.security;
 
+import com.fredande.rewardsappbackend.service.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

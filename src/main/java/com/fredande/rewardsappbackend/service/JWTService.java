@@ -1,4 +1,4 @@
-package com.fredande.rewardsappbackend;
+package com.fredande.rewardsappbackend.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

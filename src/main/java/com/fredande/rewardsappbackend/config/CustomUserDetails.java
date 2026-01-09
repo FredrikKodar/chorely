@@ -1,4 +1,4 @@
-package com.fredande.rewardsappbackend;
+package com.fredande.rewardsappbackend.config;
 
 import com.fredande.rewardsappbackend.model.User;
 import org.jspecify.annotations.NonNull;
@@ -9,7 +9,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-/// Implementation of custom UserDetails
 public class CustomUserDetails implements UserDetails {
 
     private final User user;

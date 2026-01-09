@@ -1,6 +1,6 @@
 package com.fredande.rewardsappbackend.service;
 
-import com.fredande.rewardsappbackend.CustomUserDetails;
+import com.fredande.rewardsappbackend.config.CustomUserDetails;
 import com.fredande.rewardsappbackend.dto.ChildRegistrationRequest;
 import com.fredande.rewardsappbackend.dto.ParentRegistrationRequest;
 import org.springframework.security.core.userdetails.UserDetails;

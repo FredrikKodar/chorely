@@ -1,6 +1,6 @@
 package com.fredande.rewardsappbackend.controller;
 
-import com.fredande.rewardsappbackend.CustomUserDetails;
+import com.fredande.rewardsappbackend.config.CustomUserDetails;
 import com.fredande.rewardsappbackend.dto.TaskCreationRequest;
 import com.fredande.rewardsappbackend.dto.TaskReadResponse;
 import com.fredande.rewardsappbackend.dto.TaskSavedResponse;

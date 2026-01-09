@@ -1,4 +1,4 @@
-package com.fredande.rewardsappbackend;
+package com.fredande.rewardsappbackend.config;
 
 import com.fredande.rewardsappbackend.model.User;
 import com.fredande.rewardsappbackend.repository.UserRepository;
@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-///  Define custom behavior for UserDetailsService
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 

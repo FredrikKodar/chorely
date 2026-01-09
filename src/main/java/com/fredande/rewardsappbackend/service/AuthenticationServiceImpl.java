@@ -1,8 +1,7 @@
 package com.fredande.rewardsappbackend.service;
 
-import com.fredande.rewardsappbackend.CustomUserDetails;
-import com.fredande.rewardsappbackend.CustomUserDetailsService;
-import com.fredande.rewardsappbackend.JWTService;
+import com.fredande.rewardsappbackend.config.CustomUserDetails;
+import com.fredande.rewardsappbackend.config.CustomUserDetailsService;
 import com.fredande.rewardsappbackend.dto.ChildRegistrationRequest;
 import com.fredande.rewardsappbackend.dto.ParentRegistrationRequest;
 import com.fredande.rewardsappbackend.enums.Role;
@@ -24,7 +23,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-/// Implementation of the custom AuthenticationService, AuthenticationServiceDef.
 @Service
 public class AuthenticationServiceImpl implements AuthenticationServiceDef {
 

@@ -1,6 +1,6 @@
 package com.fredande.rewardsappbackend.service;
 
-import com.fredande.rewardsappbackend.CustomUserDetails;
+import com.fredande.rewardsappbackend.config.CustomUserDetails;
 import com.fredande.rewardsappbackend.dto.UserIdAndFirstNameResponse;
 import com.fredande.rewardsappbackend.dto.UserResponse;
 import com.fredande.rewardsappbackend.enums.TaskStatus;

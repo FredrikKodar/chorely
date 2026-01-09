@@ -1,6 +1,6 @@
 package com.fredande.rewardsappbackend.service;
 
-import com.fredande.rewardsappbackend.CustomUserDetails;
+import com.fredande.rewardsappbackend.config.CustomUserDetails;
 import com.fredande.rewardsappbackend.dto.LoginRequest;
 import com.fredande.rewardsappbackend.dto.ParentRegistrationRequest;
 import com.fredande.rewardsappbackend.model.User;
