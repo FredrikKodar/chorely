@@ -107,4 +107,49 @@ class UserServiceTest {
 
     }
 
+    @Test
+    void get_children_valid_oneChild() {
+        // Arrange
+        User parent = new User();
+        parent.setId(1);
+        CustomUserDetails userDetails = new CustomUserDetails(parent);
+        User child = new User();
+        List<User> children = new ArrayList<>();
+        child.setId(2);
+        child.setFirstName("Bob");
+        child.setParent(parent);
+        children.add(child);
+        when(userRepository.findById(parent.getId())).thenReturn(Optional.of(parent));
+        when(userRepository.findAllByParent(parent)).thenReturn(children);
+
+        // Act
+        var response = userService.getChildren(userDetails);
+
+        //Assert
+        assertEquals("Bob", response.getFirst().firstName());
+        verify(userRepository, times(1)).findById(any(Integer.class));
+        verify(userRepository, times(1)).findAllByParent(any(User.class));
+
+    }
+
+    @Test
+    void get_children_valid_noChildren() {
+        // Arrange
+        User parent = new User();
+        parent.setId(1);
+        CustomUserDetails userDetails = new CustomUserDetails(parent);
+        List<User> children = new ArrayList<>();
+        when(userRepository.findById(parent.getId())).thenReturn(Optional.of(parent));
+        when(userRepository.findAllByParent(parent)).thenReturn(children);
+
+        // Act
+        var response = userService.getChildren(userDetails);
+
+        //Assert
+        assertEquals(0, response.size());
+        verify(userRepository, times(1)).findById(any(Integer.class));
+        verify(userRepository, times(1)).findAllByParent(any(User.class));
+
+    }
+
 }
