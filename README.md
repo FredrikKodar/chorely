@@ -12,10 +12,15 @@ progress.
 * [Quick Start](#quick-start)
     * [Prerequisites](#prerequisites)
     * [Running the Application](#running-the-application)
+        * [Development Profile (Recommended for local development)](#development-profile-recommended-for-local-development)
+        * [Production Profile](#production-profile)
 * [Project Structure](#project-structure)
 * [Documentation](#documentation)
     * [API Documentation](#api-documentation)
     * [Testing Documentation](#testing-documentation)
+* [Troubleshooting](#troubleshooting)
+    * [Application connects to wrong database](#application-connects-to-wrong-database)
+    * [Missing environment variables error](#missing-environment-variables-error)
 
 <!-- TOC -->
 
@@ -48,19 +53,39 @@ progress.
 
 ### Running the Application
 
-**With environment variables:**
+#### Development Profile (Recommended for local development)
+
+1. **Set environment variables:**
 
 ```bash
-mvn spring-boot:run \
-  -Dspring-boot.run.arguments="\
-    --DB_URL=jdbc:mysql://localhost:3306/rewards_db \
-    --DB_USER=your_username \
-    --DB_PASSWORD=your_password \
-    --SECRET_KEY=your-secret-key-at-least-256-bits \
-    --JWT_EXPIRES_IN=86400000"
+export SPRING_PROFILES_ACTIVE=dev
+export DB_DEV_URL=jdbc:mysql://localhost:3306/your_dev_database
+export DB_USER=your_username
+export DB_PASSWORD=your_password
+export SECRET_KEY=your-secret-key-at-least-256-bits
+export JWT_EXPIRES_IN=86400000
 ```
 
-**Replace** the values with your actual database credentials and JWT secret key.
+2. **Run with dev profile:**
+
+```bash
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+```
+
+#### Production Profile
+
+For production, use the default profile (no profile specified) and ensure environment variables are set in your
+deployment environment.
+
+```bash
+unset SPRING_PROFILES_ACTIVE
+export DB_DEV_URL=jdbc:mysql://localhost:3306/your_dev_database
+export DB_USER=your_username
+export DB_PASSWORD=your_password
+export SECRET_KEY=your-secret-key-at-least-256-bits
+export JWT_EXPIRES_IN=86400000
+mvn spring-boot:run
+```
 
 Application runs on `http://localhost:8080`
 
@@ -95,3 +120,35 @@ src/
 ### [API Documentation](docs/API.md)
 
 ### [Testing Documentation](docs/TESTS.md)
+
+## Troubleshooting
+
+### Application connects to wrong database
+
+If the application connects to `rewards_app_test` or another unexpected database, check your active Spring profile:
+
+```bash
+echo $SPRING_PROFILES_ACTIVE
+```
+
+**Solution:**
+
+- For **development**: Set it to `dev`
+  ```bash
+  export SPRING_PROFILES_ACTIVE=dev
+  ```
+
+- For **testing**: Set it to `test`
+  ```bash
+  export SPRING_PROFILES_ACTIVE=test
+  ```
+
+- For **production** (not intended for local development or testing): Unset it
+  ```bash
+  unset SPRING_PROFILES_ACTIVE
+  ```
+
+### Missing environment variables error
+
+If you see errors like `Could not resolve placeholder 'DB_URL'`, ensure all required environment variables are set.
+See each run case for specific settings.

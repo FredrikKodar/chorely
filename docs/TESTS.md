@@ -9,6 +9,7 @@
 * [Overview](#overview)
 * [Test Structure](#test-structure)
 * [Running Tests](#running-tests)
+    * [Prerequisites](#prerequisites)
     * [Run Unit Tests](#run-unit-tests)
     * [Run Integration Tests](#run-integration-tests)
 * [Test Categories](#test-categories)
@@ -47,6 +48,22 @@ src/test/java/com/fredande/rewardsappbackend/
 ```
 
 ## Running Tests
+
+### Prerequisites
+
+Before running integration tests, create a test database. Note that create-drop is used, so the data will be dropped
+when test run is completed.
+
+Tests require environment variables for database connection. Set them before running tests:
+
+```bash
+export SPRING_PROFILES_ACTIVE=test
+export DB_TEST_URL=jdbc:mysql://localhost:3306/your_test_database
+export DB_USER=your_username
+export DB_PASSWORD=your_password
+export SECRET_KEY=your-test-secret-key
+export JWT_EXPIRES_IN=86400000
+```
 
 ### Run Unit Tests
 
