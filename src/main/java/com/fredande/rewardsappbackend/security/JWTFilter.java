@@ -38,6 +38,10 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
         final String token = authHeader.substring(7);
+        if(jwtService.isTokenExpired(token)){
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token expired");
+            return;
+        }
         final String email = jwtService.extractUsername(token);
 
         Authentication authentication =
