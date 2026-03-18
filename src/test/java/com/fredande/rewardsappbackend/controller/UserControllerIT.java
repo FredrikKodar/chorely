@@ -1,5 +1,6 @@
 package com.fredande.rewardsappbackend.controller;
 
+import com.fredande.rewardsappbackend.TestcontainersConfig;
 import com.fredande.rewardsappbackend.dto.UserResponse;
 import com.fredande.rewardsappbackend.enums.Role;
 import com.fredande.rewardsappbackend.model.User;
@@ -15,6 +16,7 @@ import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRe
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.*;
 import org.springframework.test.context.ActiveProfiles;
 
@@ -26,6 +28,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Transactional
 @AutoConfigureTestRestTemplate
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@Import(TestcontainersConfig.class)
 class UserControllerIT {
 
     private final String VALID_EMAIL = "test@test.test";

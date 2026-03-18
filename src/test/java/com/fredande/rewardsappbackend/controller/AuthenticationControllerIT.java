@@ -1,5 +1,6 @@
 package com.fredande.rewardsappbackend.controller;
 
+import com.fredande.rewardsappbackend.TestcontainersConfig;
 import com.fredande.rewardsappbackend.dto.LoginRequest;
 import com.fredande.rewardsappbackend.enums.Role;
 import com.fredande.rewardsappbackend.model.User;
@@ -7,9 +8,9 @@ import com.fredande.rewardsappbackend.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.jdbc.test.autoconfigure.AutoConfigureTestDatabase;import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
-import org.springframework.http.MediaType;
+import org.springframework.context.annotation.Import;import org.springframework.http.MediaType;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
@@ -22,6 +23,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Import(TestcontainersConfig.class)
 @Transactional
 class AuthenticationControllerIT {
 
