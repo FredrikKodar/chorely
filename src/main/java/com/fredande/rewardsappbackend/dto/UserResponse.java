@@ -1,6 +1,7 @@
 package com.fredande.rewardsappbackend.dto;
 
-public record UserResponse(String email,
+public record UserResponse(Integer id,
+                           String email,
                            String firstName,
                            String lastName,
                            Integer currentPoints,

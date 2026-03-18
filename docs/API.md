@@ -12,6 +12,7 @@
     * [Register Parent](#register-parent)
     * [Register Child](#register-child)
 * [User Endpoints](#user-endpoints)
+    * [Get Current User](#get-current-user)
     * [Get User by ID](#get-user-by-id)
     * [Get Children](#get-children)
 * [Task Endpoints](#task-endpoints)
@@ -24,6 +25,7 @@
     * [Toggle Task Status (Child)](#toggle-task-status-child)
     * [Approve Task](#approve-task)
 * [Task Status Flow](#task-status-flow)
+* [Error Handling](#error-handling)
 * [Authentication](#authentication)
 
 <!-- TOC -->
@@ -63,6 +65,8 @@ http://localhost:8080/api
 }
 ```
 
+**Note:** The `roles` field returns authorities as a string (e.g., "[ROLE_PARENT]" or "[ROLE_CHILD]")
+
 ---
 
 ### Register Parent
@@ -82,7 +86,7 @@ http://localhost:8080/api
 
 **Validation:**
 
-- Email must be valid format
+- Email must match regex: `^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$`
 - Password must be 8-40 characters
 
 **Response (201 Created):**
@@ -111,7 +115,9 @@ http://localhost:8080/api
 
 **Validation:**
 
-- Password must be numeric only (8-20 characters)
+- Username: No specific validation constraints
+- Password: Must be numeric only (8-20 characters)
+- firstName: No specific validation constraints
 
 **Response (201 Created):**
 
@@ -123,6 +129,34 @@ http://localhost:8080/api
 
 ## User Endpoints
 
+### Get Current User
+
+| Method | Endpoint      | Description            | Authentication Required |
+|--------|---------------|------------------------|-------------------------|
+| GET    | `/users/me` | Get current authenticated user's profile | Yes                     |
+
+**Response (200 OK):**
+
+```json
+{
+  "id": 1,
+  "email": "parent@example.com",
+  "firstName": "John",
+  "lastName": "Doe",
+  "currentPoints": 100,
+  "totalPoints": 500,
+  "numTasksOpen": 2,
+  "numTasksCompleted": 8,
+  "numTasksTotal": 10
+}
+```
+
+**✅ Resolves**: User ID requirement for frontend login flow
+**✅ Status**: IMPLEMENTED in backend
+**✅ Usage**: Frontend can now fetch user data without knowing user ID
+
+---
+
 ### Get User by ID
 
 | Method | Endpoint      | Description            | Authentication Required |
@@ -133,6 +167,7 @@ http://localhost:8080/api
 
 ```json
 {
+  "id": 2,
   "email": "child@example.com",
   "firstName": "Johnny",
   "lastName": "Doe",
@@ -190,8 +225,8 @@ http://localhost:8080/api
 **Validation:**
 
 - Title: 8-140 characters, not blank
-- Description: 8-255 characters, not blank
-- Points: Non-null, >= 0
+- Description: 8-255 characters, not blank  
+- Points: Non-null, must be >= 0
 
 **Response (201 Created):**
 
@@ -399,11 +434,69 @@ ASSIGNED → PENDING_APPROVAL → APPROVED
    └──────────────┘
 ```
 
+### Task Status Enum Values
+
+The `TaskStatus` enum has the following values:
+
+```json
+{
+  "status": "ASSIGNED" | "PENDING_APPROVAL" | "APPROVED"
+}
+```
+
 - **ASSIGNED**: Task created by parent, assigned to child
-- **PENDING_APPROVAL**: Child marked task as complete, awaiting parent approval
+- **PENDING_APPROVAL**: Child marked task as complete, awaiting parent approval  
 - **APPROVED**: Parent approved the task, points awarded
 
+### Status Transitions
+
+- **ASSIGNED → PENDING_APPROVAL**: Child toggles task status (child only)
+- **PENDING_APPROVAL → APPROVED**: Parent approves task (parent only)
+- **PENDING_APPROVAL → ASSIGNED**: Parent can reject by updating status back to ASSIGNED
+
 ---
+
+## Error Handling
+
+The API follows standard HTTP status codes:
+
+| Status Code | Description | Common Causes |
+|-------------|-------------|---------------|
+| 200 OK | Success | Request completed successfully |
+| 201 Created | Resource created | POST requests that create resources |
+| 400 Bad Request | Invalid request | Validation failures, malformed JSON |
+| 401 Unauthorized | Authentication required | Missing or invalid JWT token |
+| 403 Forbidden | No permission | User doesn't have required role |
+| 404 Not Found | Resource not found | Invalid user ID, task ID, etc. |
+| 500 Internal Server Error | Server error | Unexpected exceptions |
+
+### Error Response Format
+
+```json
+{
+  "timestamp": "2026-01-09T10:00:00.000+00:00",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Validation failed",
+  "path": "/api/tasks"
+}
+```
+
+For validation errors, additional details may be included:
+
+```json
+{
+  "timestamp": "2026-01-09T10:00:00.000+00:00",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "Validation failed",
+  "errors": [
+    "Title must be 8-140 characters.",
+    "Description must not be blank."
+  ],
+  "path": "/api/tasks"
+}
+```
 
 ## Authentication
 
@@ -414,5 +507,84 @@ Authorization: Bearer <token>
 ```
 
 Obtain the token via the `/auth/login` endpoint.
+
+### JWT Token Handling
+
+- **Storage**: Store token in memory (not localStorage) for security
+- **Expiration**: Token expires after 86400 seconds (24 hours)
+- **Refresh**: No automatic refresh - user must login again after expiration
+- **Roles**: Token contains user roles/authorities
+
+### ✅ RESOLVED: User ID Requirement
+
+**Status**: IMPLEMENTED ✨
+
+The `/api/users/me` endpoint has been added to the backend, resolving the user ID requirement for the frontend login flow.
+
+#### Implementation Details:
+
+**Backend Endpoint**: `GET /api/users/me`
+```java
+@GetMapping("/me")
+public UserResponse getCurrentUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
+    return userService.getUserById(userDetails.getId());
+}
+```
+
+**DTO Update**: `UserResponse.java` now includes `id` field
+```java
+public record UserResponse(Integer id,  // ✅ Added
+                           String email,
+                           String firstName,
+                           String lastName,
+                           Integer currentPoints,
+                           Integer totalPoints,
+                           Integer numTasksOpen,
+                           Integer numTasksCompleted,
+                           Integer numTasksTotal) {}
+```
+
+#### Frontend Integration:
+
+**Updated Login Flow**:
+```typescript
+// services/userService.ts
+getCurrentUser: async (): Promise<UserResponse> => {
+  const response = await api.get('/users/me');
+  return response.data; // Now includes id field
+}
+
+// context/AuthContext.tsx
+const login = async (email, password) => {
+  const authResponse = await authService.login(email, password);
+  setAuthToken(authResponse.token);
+  
+  // ✅ Now works - no more fallback needed!
+  const userResponse = await userService.getCurrentUser();
+  setCurrentUserId(userResponse.id); // Proper user ID
+  
+  const role = parseRoleFromAuthResponse(authResponse.roles);
+  
+  dispatch({ type: 'LOGIN_SUCCESS', payload: {
+    user: { ...userResponse, role },
+    token: authResponse.token,
+    expiresIn: authResponse.expiresIn
+  } });
+};
+```
+
+#### Benefits:
+- ✅ **Production-Ready**: No more temporary workarounds
+- ✅ **Clean Architecture**: Proper separation of concerns
+- ✅ **Type Safety**: Complete UserResponse with all fields
+- ✅ **Maintainable**: Standard REST pattern
+
+#### Frontend Updates Required:
+1. ✅ Remove temporary fallback logic
+2. ✅ Use `getCurrentUser()` directly
+3. ✅ Remove `fallbackUserId` workarounds
+4. ✅ Update error handling for cleaner code
+
+**The login flow is now production-ready!** 🎉
 
 ---

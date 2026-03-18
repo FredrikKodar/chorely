@@ -20,7 +20,12 @@ public class UserController {
         this.userService = userService;
     }
 
-    // Create
+    // Read
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getCurrentUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return ResponseEntity.status(200).body(userService.getUserById(userDetails.getId(), userDetails));
+    }
+
     @GetMapping("{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Integer id,
                                                     @AuthenticationPrincipal CustomUserDetails userDetails) {
