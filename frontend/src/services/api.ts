@@ -33,24 +33,31 @@ export const clearAuthToken = () => {
 
 // Handle common error responses
 export const handleApiError = (error: any): never => {
+  console.error('🔴 API Error:', error);
+  
   if (error.response) {
+    console.error('📌 Status:', error.response.status);
+    console.error('📌 Data:', error.response.data);
+    
     switch (error.response.status) {
       case 401:
         clearAuthToken();
-        throw new Error('UNAUTHORIZED');
+        throw new Error('UNAUTHORIZED: ' + (error.response.data.message || 'Invalid credentials'));
       case 403:
-        throw new Error('Forbidden - You do not have permission');
+        throw new Error('Forbidden: You do not have permission to access this resource');
       case 404:
-        throw new Error('Resource not found');
+        throw new Error('Resource not found: ' + (error.response.data.message || 'Endpoint not available'));
       case 400:
-        throw new Error(error.response.data.message || 'Bad request');
+        throw new Error('Bad request: ' + (error.response.data.message || 'Invalid input data'));
+      case 500:
+        throw new Error('Server error: ' + (error.response.data.message || 'Internal server error'));
       default:
-        throw new Error(error.response.data.message || 'API error occurred');
+        throw new Error('API error: ' + (error.response.data.message || 'Unknown error occurred'));
     }
   } else if (error.request) {
-    throw new Error('No response received from server');
+    throw new Error('No response received from server. Is the backend running?');
   } else {
-    throw new Error('Request setup error');
+    throw new Error('Request setup error: ' + error.message);
   }
 };
 
