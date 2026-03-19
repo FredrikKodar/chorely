@@ -10,7 +10,7 @@ export const authService = {
       return response.data;
     } catch (error) {
       console.error('💥 Login API error:', error);
-      handleApiError(error);
+      return handleApiError(error);
     }
   },
   
@@ -19,7 +19,7 @@ export const authService = {
       const response = await api.post('/auth/register', { email, password });
       return response.data;
     } catch (error) {
-      handleApiError(error);
+      return handleApiError(error);
     }
   },
   
@@ -32,7 +32,7 @@ export const authService = {
       const response = await api.post('/auth/register-child', childData);
       return response.data;
     } catch (error) {
-      handleApiError(error);
+      return handleApiError(error);
     }
   }
 };

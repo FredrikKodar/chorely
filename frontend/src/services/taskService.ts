@@ -7,7 +7,7 @@ export const taskService = {
       const response = await api.get('/tasks');
       return response.data;
     } catch (error) {
-      handleApiError(error);
+      return handleApiError(error);
     }
   },
   
@@ -16,7 +16,7 @@ export const taskService = {
       const response = await api.get(`/tasks/${taskId}`);
       return response.data;
     } catch (error) {
-      handleApiError(error);
+      return handleApiError(error);
     }
   },
   
@@ -25,7 +25,7 @@ export const taskService = {
       const response = await api.post('/tasks', taskData);
       return response.data;
     } catch (error) {
-      handleApiError(error);
+      return handleApiError(error);
     }
   },
   
@@ -34,7 +34,7 @@ export const taskService = {
       const response = await api.post(`/tasks/${childId}`, taskData);
       return response.data;
     } catch (error) {
-      handleApiError(error);
+      return handleApiError(error);
     }
   },
   
@@ -43,7 +43,7 @@ export const taskService = {
       const response = await api.patch(`/tasks/${taskId}`, taskData);
       return response.data;
     } catch (error) {
-      handleApiError(error);
+      return handleApiError(error);
     }
   },
   
@@ -52,7 +52,7 @@ export const taskService = {
       const response = await api.patch(`/tasks/${taskId}/toggle-status-child`);
       return response.data;
     } catch (error) {
-      handleApiError(error);
+      return handleApiError(error);
     }
   },
   
@@ -61,7 +61,7 @@ export const taskService = {
       const response = await api.patch(`/tasks/${taskId}/approve`);
       return response.data;
     } catch (error) {
-      handleApiError(error);
+      return handleApiError(error);
     }
   },
   
@@ -70,7 +70,7 @@ export const taskService = {
       const response = await api.get('/tasks/pending-approval');
       return response.data;
     } catch (error) {
-      handleApiError(error);
+      return handleApiError(error);
     }
   },
   
@@ -81,7 +81,7 @@ export const taskService = {
       });
       return response.data;
     } catch (error) {
-      handleApiError(error);
+      return handleApiError(error);
     }
   }
 };

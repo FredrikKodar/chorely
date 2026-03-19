@@ -4,10 +4,11 @@ import { taskService } from '../../services/taskService';
 import { UserDashboardCard } from '../../components/dashboard/UserDashboardCard';
 import { TaskList } from '../../components/tasks/TaskList';
 import { TaskStatusChart } from '../../components/dashboard/TaskStatusChart';
+import { TaskReadResponse } from '../../types/tasks';
 
 export const ChildDashboard: React.FC = () => {
   const { state } = useAuth();
-  const [tasks, setTasks] = useState<any[]>([]);
+  const [tasks, setTasks] = useState<TaskReadResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,7 +19,7 @@ export const ChildDashboard: React.FC = () => {
         const tasksData = await taskService.getTasks();
         setTasks(tasksData);
       } catch (err) {
-        setError(err.message);
+        setError(err instanceof Error ? err.message : 'Failed to load tasks');
       } finally {
         setLoading(false);
       }

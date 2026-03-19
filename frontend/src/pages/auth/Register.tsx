@@ -36,8 +36,8 @@ export const Register: React.FC = () => {
       setEmail('');
       setPassword('');
       setConfirmPassword('');
-    } catch (err) {
-      setError(err.message || 'Registration failed. Please try again.');
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Registration failed. Please try again.');
     } finally {
       setLoading(false);
     }

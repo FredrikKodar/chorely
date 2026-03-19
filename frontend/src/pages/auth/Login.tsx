@@ -19,8 +19,8 @@ export const Login: React.FC = () => {
     try {
       await login(email, password);
       // Auth context will handle redirection based on role
-    } catch (err) {
-      setError(err.message || 'Login failed. Please check your credentials.');
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Login failed. Please check your credentials.');
       setLoading(false);
     }
   };

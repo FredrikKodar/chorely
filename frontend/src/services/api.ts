@@ -64,7 +64,7 @@ export const handleApiError = (error: any): never => {
 // Example component-level 401 handling
 export const useApiErrorHandler = (navigate: any) => {
   return (error: any) => {
-    if (error.message === 'UNAUTHORIZED') {
+    if (error.message.startsWith('UNAUTHORIZED'))  {
       clearAuthToken();
       navigate('/login');
     }

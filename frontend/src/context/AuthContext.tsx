@@ -40,6 +40,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     error: null,
   });
 
+  const navigate = useNavigate();
+
   const parseRoleFromAuthResponse = (rolesString: string): 'PARENT' | 'CHILD' => {
     if (rolesString.includes('ROLE_PARENT')) return 'PARENT';
     if (rolesString.includes('ROLE_CHILD')) return 'CHILD';
@@ -86,12 +88,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       
     } catch (error) {
       console.error('❌ Login failed:', error);
-      dispatch({ type: 'LOGIN_FAILURE', payload: error.message });
+      dispatch({ type: 'LOGIN_FAILURE', payload: error instanceof Error ? error.message : 'Login failed' });
       throw error;
     }
   };
-
-  const navigate = useNavigate();
   
   const logout = () => {
     clearAuthToken();
@@ -105,7 +105,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       await authService.registerParent(email, password);
       dispatch({ type: 'REGISTER_SUCCESS' });
     } catch (error) {
-      dispatch({ type: 'REGISTER_FAILURE', payload: error.message });
+      dispatch({ type: 'REGISTER_FAILURE', payload: error instanceof Error ? error.message : 'Registration failed' });
       throw error;
     }
   };
@@ -116,7 +116,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       await authService.registerChild(childData);
       dispatch({ type: 'REGISTER_SUCCESS' });
     } catch (error) {
-      dispatch({ type: 'REGISTER_FAILURE', payload: error.message });
+      dispatch({ type: 'REGISTER_FAILURE', payload: error instanceof Error ? error.message : 'Registration failed' });
       throw error;
     }
   };

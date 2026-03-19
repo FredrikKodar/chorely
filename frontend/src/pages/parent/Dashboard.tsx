@@ -6,10 +6,11 @@ import { UserDashboardCard } from '../../components/dashboard/UserDashboardCard'
 import { TaskList } from '../../components/tasks/TaskList';
 import { QuickStats } from '../../components/dashboard/QuickStats';
 import { PendingApprovalList } from '../../components/tasks/PendingApprovalList';
+import { TaskReadResponse } from '../../types/tasks';
 
 export const ParentDashboard: React.FC = () => {
   const { state } = useAuth();
-  const [tasks, setTasks] = useState<any[]>([]);
+  const [tasks, setTasks] = useState<TaskReadResponse[]>([]);
   const [pendingTasks, setPendingTasks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -28,7 +29,7 @@ export const ParentDashboard: React.FC = () => {
         setPendingTasks(pendingData);
         
       } catch (err) {
-        setError(err.message);
+        setError(err instanceof Error ? err.message : 'Failed to load dashboard data');
       } finally {
         setLoading(false);
       }

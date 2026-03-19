@@ -10,7 +10,7 @@ export const userService = {
       return response.data;
     } catch (error) {
       console.error('💥 User API error:', error);
-      handleApiError(error);
+      return handleApiError(error);
     }
   },
   
@@ -19,7 +19,7 @@ export const userService = {
       const response = await api.get(`/users/${userId}`);
       return response.data;
     } catch (error) {
-      handleApiError(error);
+      return handleApiError(error);
     }
   },
   
@@ -28,7 +28,7 @@ export const userService = {
       const response = await api.get('/users/children');
       return response.data;
     } catch (error) {
-      handleApiError(error);
+      return handleApiError(error);
     }
   }
 };

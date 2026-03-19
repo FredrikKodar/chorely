@@ -8,13 +8,13 @@ export interface User {
   id: number;
   email: string;
   role: 'PARENT' | 'CHILD';
-  firstName?: string;
-  lastName?: string;
-  currentPoints?: number;
-  totalPoints?: number;
-  numTasksOpen?: number;
-  numTasksCompleted?: number;
-  numTasksTotal?: number;
+  firstName: string;
+  lastName: string;
+  currentPoints: number;
+  totalPoints: number;
+  numTasksOpen: number;
+  numTasksCompleted: number;
+  numTasksTotal: number;
 }
 
 export interface AuthState {
