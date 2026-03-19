@@ -10,6 +10,7 @@ import { ChildDashboard } from './pages/child/Dashboard';
 import { ChildrenList } from './pages/parent/Children';
 import { TaskManagement } from './pages/parent/Tasks';
 import { PointsHistory } from './pages/parent/History';
+import { TaskDetail } from './pages/child/TaskDetail';
 
 // Layout components
 import { ParentLayout } from './layouts/ParentLayout';
@@ -39,7 +40,7 @@ function AppRoutes() {
         <Route path="/child/*" element={<ChildLayout />}>
           <Route path="dashboard" element={<ChildDashboard />} />
           <Route path="tasks" element={<div>Child Tasks</div>} />
-          <Route path="tasks/:id" element={<div>Task Detail</div>} />
+          <Route path="tasks/:id" element={<TaskDetail />} />
         </Route>
       </Route>
       
