@@ -2,13 +2,15 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
 
-// Temporary page components for development
-const Login = () => <div className="p-4">Login Page</div>;
-const Register = () => <div className="p-4">Register Page</div>;
-const ParentLayout = () => <div className="p-4">Parent Layout</div>;
-const ChildLayout = () => <div className="p-4">Child Layout</div>;
-const ParentDashboard = () => <div className="p-4">Parent Dashboard</div>;
-const ChildDashboard = () => <div className="p-4">Child Dashboard</div>;
+// Import real page components
+import { Login } from './pages/auth/Login';
+import { Register } from './pages/auth/Register';
+import { ParentDashboard } from './pages/parent/Dashboard';
+import { ChildDashboard } from './pages/child/Dashboard';
+
+// Layout components
+import { ParentLayout } from './layouts/ParentLayout';
+import { ChildLayout } from './layouts/ChildLayout';
 const NotFound = () => <div className="p-4">404 Not Found</div>;
 
 function AppRoutes() {

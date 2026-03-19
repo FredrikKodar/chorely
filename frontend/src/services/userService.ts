@@ -4,9 +4,12 @@ import { UserResponse, UserIdAndFirstNameResponse } from '../types/user';
 export const userService = {
   getCurrentUser: async (): Promise<UserResponse> => {
     try {
+      console.log('📡 Fetching current user from:', api.defaults.baseURL + '/users/me');
       const response = await api.get('/users/me');
+      console.log('📥 User data:', response.data);
       return response.data;
     } catch (error) {
+      console.error('💥 User API error:', error);
       handleApiError(error);
     }
   },

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { authService } from '../services/authService';
 import { userService } from '../services/userService';
 import { setAuthToken, clearAuthToken } from '../services/api';
@@ -48,11 +49,24 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const login = async (email: string, password: string) => {
     dispatch({ type: 'LOGIN_START' });
     try {
-      const authResponse = await authService.login(email, password);
-      setAuthToken(authResponse.token);
-      const role = parseRoleFromAuthResponse(authResponse.roles);
-      const userResponse = await userService.getCurrentUser();
+      console.log('🔑 Attempting login with:', email);
       
+      // Step 1: Get auth token
+      const authResponse = await authService.login(email, password);
+      console.log('🔐 Auth response received:', authResponse);
+      
+      // Step 2: Set token for API calls
+      setAuthToken(authResponse.token);
+      
+      // Step 3: Parse role from response
+      const role = parseRoleFromAuthResponse(authResponse.roles);
+      console.log('👤 Parsed role:', role);
+      
+      // Step 4: Get user data
+      const userResponse = await userService.getCurrentUser();
+      console.log('📋 User data received:', userResponse);
+      
+      // Step 5: Create auth payload
       const payload = {
         user: {
           ...userResponse,
@@ -62,16 +76,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         expiresIn: authResponse.expiresIn
       };
       
+      console.log('✅ Login successful, dispatching success action');
       dispatch({ type: 'LOGIN_SUCCESS', payload: payload });
+      
+      // Navigate based on role
+      const redirectPath = role === 'PARENT' ? '/parent/dashboard' : '/child/dashboard';
+      console.log('🚀 Redirecting to:', redirectPath);
+      navigate(redirectPath);
+      
     } catch (error) {
+      console.error('❌ Login failed:', error);
       dispatch({ type: 'LOGIN_FAILURE', payload: error.message });
       throw error;
     }
   };
 
+  const navigate = useNavigate();
+  
   const logout = () => {
     clearAuthToken();
     dispatch({ type: 'LOGOUT' });
+    navigate('/login');
   };
 
   const registerParent = async (email: string, password: string) => {
