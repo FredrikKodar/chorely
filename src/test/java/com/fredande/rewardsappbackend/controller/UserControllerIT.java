@@ -104,7 +104,7 @@ class UserControllerIT {
                         UserResponse.class);
 
         // Assert
-        assertEquals(401, response.getStatusCode().value());
+        assertEquals(403, response.getStatusCode().value());
 
     }
 

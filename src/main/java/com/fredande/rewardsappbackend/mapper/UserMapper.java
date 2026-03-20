@@ -21,9 +21,13 @@ public interface UserMapper {
 
     UserIdAndFirstNameResponse userToUserIdAndFirstNameResponse(User user);
 
-    @Mapping(target = "numTasksOpen", expression = "java(getNumOpenTasks(user))")
-    @Mapping(target = "numTasksCompleted", expression = "java(getNumCompletedTasks(user))")
-    @Mapping(target = "numTasksTotal", expression = "java(numTasksCompleted + numTasksOpen)")
+   @Mapping(target = "username", ignore = true)
+   @Mapping(target = "password", ignore = true)
+   @Mapping(target = "tasks", ignore = true)
+   @Mapping(target = "parent", ignore = true)
+   @Mapping(target = "numTasksOpen", expression = "java(getNumOpenTasks(user))")
+   @Mapping(target = "numTasksCompleted", expression = "java(getNumCompletedTasks(user))")
+   @Mapping(target = "numTasksTotal", expression = "java(getNumOpenTasks(user) + getNumCompletedTasks(user))")
     UserResponse userToUserResponse(User user);
 
     default Integer getNumOpenTasks(User user) {
