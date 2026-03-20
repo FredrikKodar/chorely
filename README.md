@@ -34,7 +34,7 @@ progress.
 
 ## Technology Stack
 
-- **Spring Boot 3**
+- **Spring Boot 4**
 - **Spring Security** with JWT authentication
 - **Spring Data JPA**
 - **MySQL database**
