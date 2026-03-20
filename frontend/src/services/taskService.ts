@@ -11,6 +11,15 @@ export const taskService = {
     }
   },
   
+  getTasksByUserId: async (userId: number): Promise<TaskReadResponse[]> => {
+    try {
+      const response = await api.get(`/tasks/user/${userId}`);
+      return response.data;
+    } catch (error) {
+      return handleApiError(error);
+    }
+  },
+  
   getTaskById: async (taskId: number): Promise<TaskReadResponse> => {
     try {
       const response = await api.get(`/tasks/${taskId}`);

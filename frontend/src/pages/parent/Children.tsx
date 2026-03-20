@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import { userService } from '../../services/userService';
 import { UserIdAndFirstNameResponse } from '../../types/user';
 import { PrimaryButton, SecondaryButton } from '../../components/ui/Button';
-import { PlusIcon, UserCircleIcon } from '@heroicons/react/24/outline';
+import { PlusIcon, UserCircleIcon, PencilIcon } from '@heroicons/react/24/outline';
 import { ChildRegistrationForm } from '../../components/children/ChildRegistrationForm';
+import { ChildEditForm } from '../../components/children/ChildEditForm';
 
 export const ChildrenList: React.FC = () => {
   const { state } = useAuth();
+  const navigate = useNavigate();
   const [children, setChildren] = useState<UserIdAndFirstNameResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isChildFormOpen, setIsChildFormOpen] = useState(false);
+  const [isEditFormOpen, setIsEditFormOpen] = useState(false);
+  const [selectedChild, setSelectedChild] = useState<UserIdAndFirstNameResponse | null>(null);
 
   const fetchChildren = async () => {
     try {
@@ -38,6 +43,13 @@ export const ChildrenList: React.FC = () => {
   const handleChildRegistered = () => {
     fetchChildren();
   };
+
+  // Cache children data in localStorage for use in ChildTasks page
+  useEffect(() => {
+    if (children.length > 0) {
+      localStorage.setItem('childrenCache', JSON.stringify(children));
+    }
+  }, [children]);
 
   if (loading) {
     return (
@@ -115,10 +127,14 @@ export const ChildrenList: React.FC = () => {
                 </div>
               </div>
               <div className="mt-4 flex gap-2">
-                <SecondaryButton>
+                <SecondaryButton onClick={() => navigate(`/parent/children/${child.id}/tasks`)}>
                   View Tasks
                 </SecondaryButton>
-                <SecondaryButton>
+                <SecondaryButton onClick={() => {
+                  setSelectedChild(child);
+                  setIsEditFormOpen(true);
+                }}>
+                  <PencilIcon className="w-4 h-4 mr-2" />
                   Edit
                 </SecondaryButton>
               </div>
@@ -131,7 +147,14 @@ export const ChildrenList: React.FC = () => {
       isOpen={isChildFormOpen}
       onClose={() => setIsChildFormOpen(false)}
       onChildRegistered={handleChildRegistered}
-    />    
+    />
+    
+    <ChildEditForm
+      isOpen={isEditFormOpen}
+      onClose={() => setIsEditFormOpen(false)}
+      child={selectedChild}
+      onChildUpdated={handleChildRegistered}
+    />
     </div>
   );
 };

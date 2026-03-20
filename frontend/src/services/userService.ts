@@ -30,5 +30,14 @@ export const userService = {
     } catch (error) {
       return handleApiError(error);
     }
+  },
+  
+  updateChild: async (childId: number, data: { firstName: string }): Promise<UserIdAndFirstNameResponse> => {
+    try {
+      const response = await api.patch(`/users/children/${childId}`, data);
+      return response.data;
+    } catch (error) {
+      return handleApiError(error);
+    }
   }
 };

@@ -8,9 +8,10 @@ interface TaskFormProps {
   onClose: () => void;
   onTaskCreated: (task: any) => void;
   isOpen: boolean;
+  childId?: number;
 }
 
-export const TaskForm: React.FC<TaskFormProps> = ({ onClose, onTaskCreated, isOpen }) => {
+export const TaskForm: React.FC<TaskFormProps> = ({ onClose, onTaskCreated, isOpen, childId }) => {
   const [formData, setFormData] = useState<TaskCreationRequest>({
     title: '',
     description: '',
@@ -27,9 +28,14 @@ export const TaskForm: React.FC<TaskFormProps> = ({ onClose, onTaskCreated, isOp
     try {
       console.log('📝 Creating task with data:', formData);
       
-      // Use createTask for now - will switch to createTaskForChild when child selection is implemented
-      console.log('📤 Creating task for current user');
-      const createdTask = await taskService.createTask(formData);
+      let createdTask;
+      if (childId) {
+        console.log('📤 Creating task for child:', childId);
+        createdTask = await taskService.createTaskForChild(childId, formData);
+      } else {
+        console.log('📤 Creating task for current user');
+        createdTask = await taskService.createTask(formData);
+      }
       console.log('✅ Task created successfully:', createdTask);
       
       onTaskCreated(createdTask);

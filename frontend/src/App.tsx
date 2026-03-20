@@ -7,7 +7,9 @@ import { Login } from './pages/auth/Login';
 import { Register } from './pages/auth/Register';
 import { ParentDashboard } from './pages/parent/Dashboard';
 import { ChildDashboard } from './pages/child/Dashboard';
+import { ChildTasks } from './pages/child/Tasks';
 import { ChildrenList } from './pages/parent/Children';
+import { ChildTaskManagement } from './pages/parent/ChildTasks';
 import { TaskManagement } from './pages/parent/Tasks';
 import { PointsHistory } from './pages/parent/History';
 import { TaskDetail } from './pages/child/TaskDetail';
@@ -31,6 +33,7 @@ function AppRoutes() {
         <Route path="/parent/*" element={<ParentLayout />}>
           <Route path="dashboard" element={<ParentDashboard />} />
           <Route path="children" element={<ChildrenList />} />
+          <Route path="children/:childId/tasks" element={<ChildTaskManagement />} />
           <Route path="tasks" element={<TaskManagement />} />
           <Route path="history" element={<PointsHistory />} />
         </Route>
@@ -39,7 +42,7 @@ function AppRoutes() {
       <Route element={<ProtectedRoute requiredRole="CHILD" />}>
         <Route path="/child/*" element={<ChildLayout />}>
           <Route path="dashboard" element={<ChildDashboard />} />
-          <Route path="tasks" element={<div>Child Tasks</div>} />
+          <Route path="tasks" element={<ChildTasks />} />
           <Route path="tasks/:id" element={<TaskDetail />} />
         </Route>
       </Route>
