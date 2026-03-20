@@ -37,4 +37,11 @@ public class UserController {
         return ResponseEntity.status(200).body(userService.getChildren(userDetails));
     }
 
+    @PatchMapping("children/{childId}")
+    public ResponseEntity<UserIdAndFirstNameResponse> updateChild(@PathVariable Integer childId,
+                                                                 @RequestBody UserIdAndFirstNameResponse updatedChild,
+                                                                 @AuthenticationPrincipal CustomUserDetails userDetails) {
+        return ResponseEntity.status(200).body(userService.updateChild(childId, userDetails, updatedChild));
+    }
+
 }

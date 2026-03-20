@@ -50,6 +50,12 @@ public class TaskController {
             @AuthenticationPrincipal CustomUserDetails userDetails) {
         return ResponseEntity.status(200).body(taskService.getAllTasksByUser(userDetails));
     }
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<TaskReadResponse>> getAllTasksByUserAndUserId(
+            @PathVariable Integer userId,
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        return ResponseEntity.status(200).body(taskService.getAllTasksByUserAndUserId(userId, userDetails));
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<TaskReadResponse> getTaskByIdAndUser(

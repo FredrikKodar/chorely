@@ -34,6 +34,23 @@ public class UserService {
     }
 
     @PreAuthorize("hasRole('PARENT')")
+    public UserIdAndFirstNameResponse updateChild(Integer childId, CustomUserDetails userDetails, UserIdAndFirstNameResponse updatedChild) {
+        User parent = userRepository.findById(userDetails.getId()).orElseThrow(EntityNotFoundException::new);
+        User child = userRepository.findById(childId).orElseThrow(EntityNotFoundException::new);
+        
+        // Verify that the child belongs to this parent
+        if (!child.getParent().getId().equals(parent.getId())) {
+            throw new EntityNotFoundException();
+        }
+        
+        // Update the child's information
+        child.setFirstName(updatedChild.firstName());
+        User savedChild = userRepository.save(child);
+        
+        return UserMapper.INSTANCE.userToUserIdAndFirstNameResponse(savedChild);
+    }
+
+    @PreAuthorize("hasRole('PARENT')")
     public void updatePoints(Integer userId, Integer points, TaskStatus status) {
         User savedUser = userRepository.findById(userId).orElseThrow();
         if (status.equals(TaskStatus.APPROVED)) {
@@ -48,11 +65,23 @@ public class UserService {
 
     @PreAuthorize("hasRole('PARENT') or hasRole('CHILD')")
     public UserResponse getUserById(Integer id, CustomUserDetails userDetails) {
-        User user = userRepository.findById(userDetails.getId()).orElseThrow(EntityNotFoundException::new);
-        if (!id.equals(user.getId())) {
-            throw new EntityNotFoundException();
+        User requestingUser = userRepository.findById(userDetails.getId()).orElseThrow(EntityNotFoundException::new);
+        User targetUser = userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        
+        // Allow users to access their own data
+        if (id.equals(requestingUser.getId())) {
+            return UserMapper.INSTANCE.userToUserResponse(requestingUser);
         }
-        return UserMapper.INSTANCE.userToUserResponse(user);
+        
+        // Allow parents to access their children's data
+        if (requestingUser.getRole().name().equals("ROLE_PARENT") && 
+            targetUser.getParent() != null && 
+            targetUser.getParent().getId().equals(requestingUser.getId())) {
+            return UserMapper.INSTANCE.userToUserResponse(targetUser);
+        }
+        
+        // Otherwise, throw exception
+        throw new EntityNotFoundException();
     }
 
 }

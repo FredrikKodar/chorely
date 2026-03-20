@@ -1,12 +1,14 @@
 import React from 'react';
 import { TaskReadResponse } from '../../types/tasks';
 import { TaskApprovalButtons } from './TaskApprovalButtons';
+import { taskService } from '../../services/taskService';
 
 interface PendingApprovalListProps {
   tasks: TaskReadResponse[];
+  onTaskUpdated: (task: TaskReadResponse) => void;
 }
 
-export const PendingApprovalList: React.FC<PendingApprovalListProps> = ({ tasks }) => (
+export const PendingApprovalList: React.FC<PendingApprovalListProps> = ({ tasks, onTaskUpdated }) => (
   <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
       Pending Approval
@@ -30,8 +32,22 @@ export const PendingApprovalList: React.FC<PendingApprovalListProps> = ({ tasks 
             </div>
             <div className="ml-4">
               <TaskApprovalButtons
-                onApprove={() => console.log('Approve task:', task.id)}
-                onReject={() => console.log('Reject task:', task.id)}
+                onApprove={async () => {
+                  try {
+                    const updatedTask = await taskService.approveTask(task.id);
+                    onTaskUpdated(updatedTask);
+                  } catch (err) {
+                    console.error('Approval failed:', err);
+                  }
+                }}
+                onReject={async () => {
+                  try {
+                    const updatedTask = await taskService.updateTask(task.id, { status: 'ASSIGNED' });
+                    onTaskUpdated(updatedTask);
+                  } catch (err) {
+                    console.error('Rejection failed:', err);
+                  }
+                }}
               />
             </div>
           </div>

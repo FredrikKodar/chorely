@@ -13,6 +13,23 @@ public interface TaskMapper {
 
     TaskSavedResponse taskToTaskSavedResponse(Task task);
 
-    TaskReadResponse taskToTaskReadResponse(Task task);
+    default TaskReadResponse taskToTaskReadResponse(Task task) {
+        if (task == null) {
+            return null;
+        }
+        
+        Integer assignedTo = task.getUser() != null ? task.getUser().getId() : null;
+        
+        return new TaskReadResponse(
+            task.getId(),
+            task.getTitle(),
+            task.getDescription(),
+            task.getPoints(),
+            task.getCreated(),
+            task.getUpdated(),
+            task.getStatus(),
+            assignedTo
+        );
+    }
 
 }

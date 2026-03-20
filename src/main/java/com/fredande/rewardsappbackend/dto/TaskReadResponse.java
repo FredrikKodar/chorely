@@ -11,9 +11,10 @@ public record TaskReadResponse(Integer id,
                                Integer points,
                                Date created,
                                Date updated,
-                               TaskStatus status) {
+                               TaskStatus status,
+                               Integer assignedTo) {
 
-    public TaskReadResponse(Integer id, String title, String description, Integer points, Date created, Date updated, TaskStatus status) {
+    public TaskReadResponse(Integer id, String title, String description, Integer points, Date created, Date updated, TaskStatus status, Integer assignedTo) {
         this.id = id;
         this.title = HtmlUtils.htmlEscape(title);
         this.description = HtmlUtils.htmlEscape(description);
@@ -21,6 +22,7 @@ public record TaskReadResponse(Integer id,
         this.created = created;
         this.updated = updated;
         this.status = status;
+        this.assignedTo = assignedTo;
     }
 
 }

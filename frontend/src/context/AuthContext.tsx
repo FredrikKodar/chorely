@@ -25,7 +25,7 @@ type AuthAction =
 const AuthContext = createContext<{
   state: AuthState;
   dispatch: React.Dispatch<AuthAction>;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string, isChildLogin?: boolean) => Promise<void>;
   logout: () => void;
   registerParent: (email: string, password: string) => Promise<void>;
   registerChild: (childData: any) => Promise<void>;
@@ -48,7 +48,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     throw new Error('Unknown role in auth response');
   };
 
-  const login = async (email: string, password: string) => {
+  const login = async (email: string, password: string, isChildLogin: boolean = false) => {
     dispatch({ type: 'LOGIN_START' });
     try {
       console.log('🔑 Attempting login with:', email);
@@ -59,6 +59,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       
       // Step 2: Set token for API calls
       setAuthToken(authResponse.token);
+      console.log('🔐 Token set:', authResponse.token.substring(0, 20) + '...');
       
       // Step 3: Parse role from response
       const role = parseRoleFromAuthResponse(authResponse.roles);

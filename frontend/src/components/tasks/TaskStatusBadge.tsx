@@ -17,9 +17,12 @@ export const TaskStatusBadge: React.FC<{ status: TaskStatus }> = ({ status }) =>
     }
   };
 
+  // Add safety check for undefined status
+  const config = statusConfig[status] || statusConfig.ASSIGNED;
+
   return (
-    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusConfig[status].color}`}>
-      {statusConfig[status].text}
+    <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.color}`}>
+      {config.text}
     </span>
   );
 };

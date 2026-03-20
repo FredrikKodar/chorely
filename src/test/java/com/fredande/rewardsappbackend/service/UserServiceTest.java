@@ -99,7 +99,7 @@ class UserServiceTest {
         assertEquals(1, response.numTasksCompleted());
         assertEquals(1, response.numTasksOpen());
         assertEquals(2, response.numTasksTotal());
-        verify(userRepository, times(1)).findById(any(Integer.class));
+        verify(userRepository, times(2)).findById(any(Integer.class));
 
     }
 

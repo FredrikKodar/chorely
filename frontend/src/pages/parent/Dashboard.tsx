@@ -80,7 +80,12 @@ export const ParentDashboard: React.FC = () => {
           {state.user && (
             <QuickStats user={state.user} />
           )}
-          <PendingApprovalList tasks={pendingTasks} />
+          <PendingApprovalList 
+            tasks={pendingTasks} 
+            onTaskUpdated={(updatedTask) => {
+              setPendingTasks(prev => prev.filter(t => t.id !== updatedTask.id));
+            }}
+          />
         </div>
       </div>
     </div>

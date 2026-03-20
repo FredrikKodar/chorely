@@ -6,7 +6,7 @@ import com.fredande.rewardsappbackend.dto.TaskReadResponse;
 import com.fredande.rewardsappbackend.dto.TaskSavedResponse;
 import com.fredande.rewardsappbackend.dto.TaskUpdateRequest;
 import com.fredande.rewardsappbackend.mapper.TaskMapper;
-import com.fredande.rewardsappbackend.model.Task;
+import com.fredande.rewardsappbackend.mapper.UserMapper;import com.fredande.rewardsappbackend.model.Task;
 import com.fredande.rewardsappbackend.model.User;
 import com.fredande.rewardsappbackend.repository.TaskRepository;
 import com.fredande.rewardsappbackend.repository.UserRepository;
@@ -163,4 +163,21 @@ public class TaskService {
         return TaskMapper.INSTANCE.taskToTaskReadResponse(savedTask);
     }
 
-}
+    @PreAuthorize("hasRole('PARENT')")
+    public List<TaskReadResponse> getAllTasksByUserAndUserId(Integer userId, CustomUserDetails userDetails) {
+        User requestingUser = userRepository.findById(userDetails.getId()).orElseThrow(EntityNotFoundException::new);
+        User targetUser = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+
+        // Allow parents to access their children's data
+        if (targetUser.getParent() != null &&
+            targetUser.getParent().getId().equals(requestingUser.getId())) {
+            return taskRepository.findByUser(targetUser)
+                    .stream()
+                    .map(TaskMapper.INSTANCE::taskToTaskReadResponse)
+                    .toList();
+        }
+
+        // Otherwise, throw exception
+        throw new EntityNotFoundException();
+
+    }}
