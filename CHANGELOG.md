@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/FredrikKodar/rewards-app-backend/compare/v1.0.0...v1.0.1) (2026-03-23)
+
+
+### Bug Fixes
+
+* update security config and frontend build directory ([#29](https://github.com/FredrikKodar/rewards-app-backend/issues/29)) ([6c96d64](https://github.com/FredrikKodar/rewards-app-backend/commit/6c96d64d3425dde399fa5f1ff45e0d889d7edecb))
+
 ## 1.0.0 (2026-03-23)
 
 
