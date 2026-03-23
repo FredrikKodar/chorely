@@ -5,9 +5,9 @@ import path from 'path'
 export default defineConfig({
   plugins: [react()],
   resolve: {
-      alias: {
-          '@': path.resolve(__dirname, './src'),
-      },
+    alias: {
+        '@': path.resolve(__dirname, './src'),
+    },
   },
   server: {
       port: 3000,
@@ -20,7 +20,7 @@ export default defineConfig({
       },
   },
   build: {
-      outDir: '../src/main/resources/static',
-      emptyOutDir: true,
+    outDir: '../src/main/resources/static',
+    emptyOutDir: true,
   },
 })
