@@ -14,9 +14,9 @@ export const authService = {
     }
   },
   
-  registerParent: async (email: string, password: string): Promise<string> => {
+  registerParent: async (email: string, password: string, firstName: string, lastName: string): Promise<string> => {
     try {
-      const response = await api.post('/auth/register', { email, password });
+      const response = await api.post('/auth/register', { email, password, firstName, lastName });
       return response.data;
     } catch (error) {
       return handleApiError(error);

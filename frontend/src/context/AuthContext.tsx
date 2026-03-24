@@ -100,10 +100,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     navigate('/login');
   };
 
-  const registerParent = async (email: string, password: string) => {
+  const registerParent = async (email: string, password: string, firstName: string, lastName: string) => {
     dispatch({ type: 'REGISTER_START' });
     try {
-      await authService.registerParent(email, password);
+      await authService.registerParent(email, password, firstName, lastName);
       dispatch({ type: 'REGISTER_SUCCESS' });
     } catch (error) {
       dispatch({ type: 'REGISTER_FAILURE', payload: error instanceof Error ? error.message : 'Registration failed' });

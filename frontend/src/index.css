@@ -30,6 +30,21 @@
   border-color: var(--primary-color);
 }
 
+/* Focus ring classes that respect theme colors */
+.focus\\:ring-primary:focus {
+  --tw-ring-color: var(--primary-color);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-color) 20%, transparent);
+}
+
+.focus\\:border-primary:focus {
+  border-color: var(--primary-color);
+}
+
+.focus\\:ring-primary-dark:focus {
+  --tw-ring-color: var(--primary-dark);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-dark) 20%, transparent);
+}
+
 /* Navigation-specific classes */
 .nav-text-inactive {
   color: #6b7280; /* gray-500 */
