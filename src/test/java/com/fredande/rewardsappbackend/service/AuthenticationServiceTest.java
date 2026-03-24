@@ -21,6 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Optional;
 
+import static com.fredande.rewardsappbackend.testUtils.TestUtils.FIRST_NAME;
+import static com.fredande.rewardsappbackend.testUtils.TestUtils.LAST_NAME;
 import static com.fredande.rewardsappbackend.enums.Role.CHILD;
 import static com.fredande.rewardsappbackend.enums.Role.PARENT;
 import static org.junit.jupiter.api.Assertions.*;
@@ -116,13 +118,13 @@ class AuthenticationServiceTest {
         //Arrange
         String email = "test@test.test";
         String password = "pass1234";
-        ParentRequest parentRequest = new ParentRequest(email, password);
+        ParentRequest request = new ParentRequest(email, password, FIRST_NAME, LAST_NAME);
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
-        when(userRepository.findByEmail(parentRequest.getEmail())).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.empty());
         when(passwordEncoder.encode(password)).thenReturn("encoded_password");
 
         //Act
-        authenticationService.registerParent(parentRequest);
+        authenticationService.registerParent(request);
 
         //Assert
         verify(userRepository).save(userCaptor.capture());
@@ -142,7 +144,7 @@ class AuthenticationServiceTest {
         //Arrange
         String email = "test@test.test";
         String password = "pass1234";
-        ParentRequest parentRequest = new ParentRequest(email, password);
+        ParentRequest request = new ParentRequest(email, password, FIRST_NAME, LAST_NAME);
         User existingUser = new User();
         existingUser.setEmail(email);
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(existingUser));
@@ -151,7 +153,7 @@ class AuthenticationServiceTest {
 
         //Assert
         assertThrows(EntityExistsException.class,
-                () -> authenticationService.registerParent(parentRequest));
+                () -> authenticationService.registerParent(request));
         verify(userRepository).findByEmail(email);
     }
 

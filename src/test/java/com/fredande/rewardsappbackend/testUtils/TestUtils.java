@@ -10,6 +10,10 @@ import org.springframework.http.ResponseEntity;
 
 public class TestUtils {
 
+        public static String FIRST_NAME = "FirstName";
+
+        public static String LAST_NAME = "LastName";
+
     public static String getToken(TestRestTemplate testRestTemplate, Integer port, String email, String password) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -27,11 +31,12 @@ public class TestUtils {
     public static void registerUser(TestRestTemplate testRestTemplate,
                                     Integer port, String email,
                                     String password,
-                                    Role role) {
+                                    String firstName,
+                                    String lastName) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> request = new HttpEntity<>(
-                String.format("{\"email\": \"%s\", \"password\": \"%s\", \"role\": \"%s\"}", email, password, role), headers
+                String.format("{\"email\": \"%s\", \"password\": \"%s\", \"firstName\": \"%s\", \"lastName\": \"%s\"}", email, password, firstName, lastName), headers
         );
         testRestTemplate.postForEntity("http://localhost:" + port + "/api/auth/register",
                 request,

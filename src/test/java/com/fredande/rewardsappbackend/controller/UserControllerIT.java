@@ -45,7 +45,7 @@ class UserControllerIT {
 
     @BeforeAll
     void beforeAll() {
-        TestUtils.registerUser(testRestTemplate, port, VALID_EMAIL, VALID_PASSWORD, Role.PARENT); // Create a user in the database, to use in the tests
+        TestUtils.registerUser(testRestTemplate, port, VALID_EMAIL, VALID_PASSWORD, "FirstName", "LastName"); // Create a user in the database, to use in the tests
     }
 
     // With JWT token generation and validation

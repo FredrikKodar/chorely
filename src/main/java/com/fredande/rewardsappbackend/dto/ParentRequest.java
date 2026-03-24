@@ -25,9 +25,11 @@ public class ParentRequest {
     public ParentRequest() {
     }
 
-    public ParentRequest(String email, String password) {
+    public ParentRequest(String email, String password, String firstName, String lastName) {
         this.email = email;
         this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
 
     public String getEmail() {
