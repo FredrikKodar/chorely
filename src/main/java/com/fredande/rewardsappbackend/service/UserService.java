@@ -1,7 +1,7 @@
 package com.fredande.rewardsappbackend.service;
 
 import com.fredande.rewardsappbackend.config.CustomUserDetails;
-import com.fredande.rewardsappbackend.dto.UserIdAndFirstNameResponse;
+import com.fredande.rewardsappbackend.dto.ParentRequest;import com.fredande.rewardsappbackend.dto.UserIdAndFirstNameResponse;
 import com.fredande.rewardsappbackend.dto.UserResponse;
 import com.fredande.rewardsappbackend.enums.TaskStatus;
 import com.fredande.rewardsappbackend.mapper.UserMapper;
@@ -83,5 +83,15 @@ public class UserService {
         // Otherwise, throw exception
         throw new EntityNotFoundException();
     }
-
-}
+    @PreAuthorize("hasRole('PARENT')")
+    public UserResponse updateUser(ParentRequest request, CustomUserDetails userDetails) {
+        User savedUser = userRepository.findById(userDetails.getId()).orElseThrow();
+        if(!savedUser.getFirstName().equals(request.getFirstName())) {
+            savedUser.setFirstName(request.getFirstName());
+        }
+        if(!savedUser.getLastName().equals(request.getLastName())) {
+            savedUser.setLastName(request.getLastName());
+        }
+        return UserMapper.INSTANCE.userToUserResponse(userRepository.save(savedUser));
+        }
+    }
