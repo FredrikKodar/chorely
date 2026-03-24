@@ -8,7 +8,16 @@ export const getThemePreferences = (): ThemePreferences => {
     const savedPreferences = sessionStorage.getItem(THEME_STORAGE_KEY);
     if (savedPreferences) {
       try {
-        return JSON.parse(savedPreferences);
+        const parsed = JSON.parse(savedPreferences);
+        const validColorSchemes = ['indigo', 'emerald'];
+        const validThemeModes = ['light', 'dark'];
+      
+        if (
+          validColorSchemes.includes(parsed.colorScheme) &&
+          validThemeModes.includes(parsed.themeMode)
+        ) {
+          return parsed;
+        }      
       } catch (error) {
         console.error('Failed to parse theme preferences:', error);
       }
