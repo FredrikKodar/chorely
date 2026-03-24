@@ -8,6 +8,7 @@ const navigation = [
   { name: 'Children', href: '/parent/children', icon: UsersIcon },
   { name: 'Tasks', href: '/parent/tasks', icon: ClipboardDocumentListIcon },
   { name: 'History', href: '/parent/history', icon: ClockIcon },
+  { name: 'Settings', href: '/settings', icon: CogIcon },
 ];
 
 export const ParentLayout: React.FC = () => {
@@ -17,7 +18,7 @@ export const ParentLayout: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Mobile header */}
-      <div className="bg-indigo-600 dark:bg-indigo-800 pb-32">
+      <div className="bg-primary dark:bg-primary-dark pb-32">
         <header className="py-4 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <div className="flex items-center">
             <h1 className="text-white text-xl font-semibold">Parent Dashboard</h1>
@@ -46,8 +47,8 @@ export const ParentLayout: React.FC = () => {
               to={item.href}
               className={`flex items-center px-3 py-2 text-sm font-medium rounded-md ${
                 location.pathname === item.href
-                  ? 'bg-indigo-700 text-white'
-                  : 'text-indigo-100 hover:bg-indigo-700 hover:text-white'
+                  ? 'bg-primary-dark text-white'
+                  : 'nav-text-inactive hover:bg-primary-dark hover:text-white'
               }`}
             >
               <item.icon className="w-5 h-5 mr-3" aria-hidden="true" />
@@ -78,13 +79,17 @@ export const ParentLayout: React.FC = () => {
                 key={item.name}
                 to={item.href}
                 className={`flex flex-col items-center justify-center flex-1 h-full ${
-                  isActive
-                    ? 'text-indigo-600 dark:text-indigo-400'
-                    : 'text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400'
+                  isActive ? 'nav-text-active' : 'nav-text-inactive'
                 }`}
               >
-                <Icon className="h-6 w-6" aria-hidden="true" />
-                <span className="text-xs mt-1">{item.name}</span>
+                <div className={`p-2 rounded-full mb-1 ${
+                  isActive ? 'nav-active-bg' : ''
+                }`}>
+                  <Icon className="h-6 w-6" aria-hidden="true" />
+                </div>
+                <span className="text-xs">
+                  {item.name}
+                </span>
               </Link>
             );
           })}

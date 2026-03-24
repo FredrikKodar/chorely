@@ -4,8 +4,67 @@
 
 :root {
   font-family: 'Inter', sans-serif;
+  --primary-color: #6366f1;
+  --primary-dark: #4f46e5;
+  --primary-light: #818cf8;
 }
 
-body {
-  @apply bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white;
+/* Apply CSS variables to Tailwind classes */
+.bg-primary {
+  background-color: var(--primary-color);
+}
+
+.bg-primary-dark {
+  background-color: var(--primary-dark);
+}
+
+.text-primary {
+  color: var(--primary-color);
+}
+
+.text-primary-light {
+  color: var(--primary-light);
+}
+
+.border-primary {
+  border-color: var(--primary-color);
+}
+
+/* Navigation-specific classes */
+.nav-text-inactive {
+  color: #6b7280; /* gray-500 */
+}
+
+.dark .nav-text-inactive {
+  color: #9ca3af; /* gray-400 */
+}
+
+.nav-text-active {
+  color: var(--primary-color);
+}
+
+/* Active navigation background - adapts to color scheme */
+.nav-active-bg {
+  background-color: color-mix(in srgb, var(--primary-color) 15%, transparent);
+}
+
+.dark .nav-active-bg {
+  background-color: color-mix(in srgb, var(--primary-color) 20%, transparent);
+}
+
+/* Dark mode overrides for color schemes */
+.dark .bg-indigo-600 {
+  background-color: var(--primary-color);
+}
+
+.dark .bg-indigo-700 {
+  background-color: var(--primary-dark);
+}
+
+.dark .bg-emerald-600 {
+  background-color: var(--primary-color);
+}
+
+.dark .bg-emerald-700 {
+  background-color: var(--primary-dark);
 }

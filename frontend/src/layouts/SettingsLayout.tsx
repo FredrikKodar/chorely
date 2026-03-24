@@ -1,17 +1,32 @@
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { HomeIcon, ClipboardDocumentListIcon, CogIcon } from '@heroicons/react/24/outline';
+import { CogIcon, HomeIcon, UsersIcon, ClipboardDocumentListIcon, ClockIcon } from '@heroicons/react/24/outline';
 
-const navigation = [
-  { name: 'Dashboard', href: '/child/dashboard', icon: HomeIcon },
-  { name: 'Tasks', href: '/child/tasks', icon: ClipboardDocumentListIcon },
-  { name: 'Settings', href: '/settings', icon: CogIcon },
-];
-
-export const ChildLayout: React.FC = () => {
+export const SettingsLayout: React.FC = () => {
   const { state, logout } = useAuth();
   const location = useLocation();
+
+  // Determine navigation based on user role
+  const getNavigation = () => {
+    if (state.user?.role === 'PARENT') {
+      return [
+        { name: 'Dashboard', href: '/parent/dashboard', icon: HomeIcon },
+        { name: 'Children', href: '/parent/children', icon: UsersIcon },
+        { name: 'Tasks', href: '/parent/tasks', icon: ClipboardDocumentListIcon },
+        { name: 'History', href: '/parent/history', icon: ClockIcon },
+        { name: 'Settings', href: '/settings', icon: CogIcon },
+      ];
+    } else {
+      return [
+        { name: 'Dashboard', href: '/child/dashboard', icon: HomeIcon },
+        { name: 'Tasks', href: '/child/tasks', icon: ClipboardDocumentListIcon },
+        { name: 'Settings', href: '/settings', icon: CogIcon },
+      ];
+    }
+  };
+
+  const navigation = getNavigation();
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -19,11 +34,11 @@ export const ChildLayout: React.FC = () => {
       <div className="bg-primary dark:bg-primary-dark pb-32">
         <header className="py-4 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <div className="flex items-center">
-            <h1 className="text-white text-xl font-semibold">My Tasks</h1>
+            <h1 className="text-white text-xl font-semibold">Settings</h1>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-white text-sm">
-              Welcome, {state.user?.firstName || 'Child'}
+              Welcome, {state.user?.firstName || 'User'}
             </span>
             <button
               onClick={logout}
@@ -57,7 +72,7 @@ export const ChildLayout: React.FC = () => {
       </div>
 
       {/* Main content */}
-      <main className="-mt-32 pb-8">
+      <main className="-mt-32 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white dark:bg-gray-800 rounded-lg shadow px-4 py-6 sm:px-6 lg:px-8">
             <Outlet />

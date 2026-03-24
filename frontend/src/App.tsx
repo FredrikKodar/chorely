@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ProtectedRoute } from './components/ProtectedRoute';
+import { ThemeProvider } from './context/ThemeContext';
 
 // Import real page components
 import { Login } from './pages/auth/Login';
@@ -13,6 +14,8 @@ import { ChildTaskManagement } from './pages/parent/ChildTasks';
 import { TaskManagement } from './pages/parent/Tasks';
 import { PointsHistory } from './pages/parent/History';
 import { TaskDetail } from './pages/child/TaskDetail';
+import ThemeSettings from './pages/settings/ThemeSettings';
+import { SettingsLayout } from './layouts/SettingsLayout';
 
 // Layout components
 import { ParentLayout } from './layouts/ParentLayout';
@@ -46,6 +49,13 @@ function AppRoutes() {
           <Route path="tasks/:id" element={<TaskDetail />} />
         </Route>
       </Route>
+
+      {/* Settings routes - accessible to both roles */}
+      <Route element={<ProtectedRoute />}>
+        <Route path="/settings" element={<SettingsLayout />}>
+          <Route index element={<ThemeSettings />} />
+        </Route>
+      </Route>
       
       {/* Redirect based on auth state */}
       <Route
@@ -70,9 +80,11 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-          <AppRoutes />
-        </div>
+        <ThemeProvider>
+          <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+            <AppRoutes />
+          </div>
+        </ThemeProvider>
       </AuthProvider>
     </Router>
   );
