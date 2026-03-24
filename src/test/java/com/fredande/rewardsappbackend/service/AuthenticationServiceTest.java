@@ -8,7 +8,7 @@ import com.fredande.rewardsappbackend.dto.ParentRequest;
 import com.fredande.rewardsappbackend.model.User;
 import com.fredande.rewardsappbackend.repository.UserRepository;
 import jakarta.persistence.EntityExistsException;
-import org.junit.jupiter.api.Test;
+import jakarta.validation.ValidationException;import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
@@ -130,6 +130,8 @@ class AuthenticationServiceTest {
         verify(userRepository).save(userCaptor.capture());
         assertEquals("encoded_password", userCaptor.getValue().getPassword());
         assertEquals("test@test.test", userCaptor.getValue().getEmail());
+        assertEquals(FIRST_NAME, userCaptor.getValue().getFirstName());
+        assertEquals(LAST_NAME, userCaptor.getValue().getLastName());
         assertEquals(PARENT, userCaptor.getValue().getRole());
         verify(userRepository).findByEmail(any());
     }

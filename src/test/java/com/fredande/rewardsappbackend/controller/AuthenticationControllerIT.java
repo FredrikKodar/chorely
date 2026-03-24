@@ -224,6 +224,44 @@ class AuthenticationControllerIT {
     }
 
     /**
+     * Registering with an empty first name should return 400.
+     */
+    @Test
+    void register_Parent_invalid_firstName_empty() throws Exception {
+        // Arrange
+        String email = "test@test.com";
+        String password = "P@ss123456";
+        ParentRequest request = new ParentRequest(email, password, "", LAST_NAME);
+
+
+        // Act & Assert
+        mvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().is(400))
+                .andExpect(content().string("First name is required"));
+    }
+
+    /**
+     * Registering with a nully first name should return 400.
+     */
+    @Test
+    void register_Parent_invalid_firstName_null() throws Exception {
+        // Arrange
+        String email = "test@test.com";
+        String password = "P@ss123456";
+        ParentRequest request = new ParentRequest(email, password, null, LAST_NAME);
+
+
+        // Act & Assert
+        mvc.perform(post("/api/auth/register")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().is(400))
+                .andExpect(content().string("First name is required"));
+    }
+
+    /**
      * Registering with an invalid email and password should return 400.
      * Malformed email where the user is missing
      */
