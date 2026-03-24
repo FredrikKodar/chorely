@@ -11,13 +11,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [theme, setTheme] = useState<ThemePreferences>(DEFAULT_THEME);
-
-  useEffect(() => {
-    // Initialize theme on mount
-    const initializedTheme = initializeTheme();
-    setTheme(initializedTheme);
-  }, []);
+const [theme, setTheme] = useState<ThemePreferences>(() => initializeTheme());
 
   const updateTheme = (updates: Partial<ThemePreferences>) => {
     const newTheme = { ...theme, ...updates };
