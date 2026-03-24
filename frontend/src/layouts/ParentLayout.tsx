@@ -48,7 +48,7 @@ export const ParentLayout: React.FC = () => {
               className={`flex items-center px-3 py-2 text-sm font-medium rounded-md ${
                 location.pathname === item.href
                   ? 'bg-primary-dark text-white'
-                  : 'text-indigo-100 hover:bg-primary-dark hover:text-white'
+                  : 'nav-text-inactive hover:bg-primary-dark hover:text-white'
               }`}
             >
               <item.icon className="w-5 h-5 mr-3" aria-hidden="true" />
@@ -79,13 +79,17 @@ export const ParentLayout: React.FC = () => {
                 key={item.name}
                 to={item.href}
                 className={`flex flex-col items-center justify-center flex-1 h-full ${
-                  isActive
-                    ? 'text-primary dark:text-primary-light'
-                    : 'text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-light'
+                  isActive ? 'nav-text-active' : 'nav-text-inactive'
                 }`}
               >
-                <Icon className="h-6 w-6" aria-hidden="true" />
-                <span className="text-xs mt-1">{item.name}</span>
+                <div className={`p-2 rounded-full mb-1 ${
+                  isActive ? 'nav-active-bg' : ''
+                }`}>
+                  <Icon className="h-6 w-6" aria-hidden="true" />
+                </div>
+                <span className="text-xs">
+                  {item.name}
+                </span>
               </Link>
             );
           })}

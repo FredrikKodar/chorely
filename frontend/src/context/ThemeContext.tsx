@@ -4,7 +4,6 @@ import { getThemePreferences, saveThemePreferences, applyTheme, initializeTheme 
 
 interface ThemeContextType {
   theme: ThemePreferences;
-  setTheme: (preferences: ThemePreferences) => void;
   updateTheme: (updates: Partial<ThemePreferences>) => void;
   resetTheme: () => void;
 }
@@ -34,7 +33,7 @@ export const ThemeProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   };
 
   return (
-    <ThemeContext.Provider value={{ theme, setTheme, updateTheme, resetTheme }}>
+    <ThemeContext.Provider value={{ theme, updateTheme, resetTheme }}>
       {children}
     </ThemeContext.Provider>
   );

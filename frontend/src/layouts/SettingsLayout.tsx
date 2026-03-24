@@ -15,11 +15,13 @@ export const SettingsLayout: React.FC = () => {
         { name: 'Children', href: '/parent/children', icon: UsersIcon },
         { name: 'Tasks', href: '/parent/tasks', icon: ClipboardDocumentListIcon },
         { name: 'History', href: '/parent/history', icon: ClockIcon },
+        { name: 'Settings', href: '/settings', icon: CogIcon },
       ];
     } else {
       return [
         { name: 'Dashboard', href: '/child/dashboard', icon: HomeIcon },
         { name: 'Tasks', href: '/child/tasks', icon: ClipboardDocumentListIcon },
+        { name: 'Settings', href: '/settings', icon: CogIcon },
       ];
     }
   };
@@ -49,6 +51,24 @@ export const SettingsLayout: React.FC = () => {
             </button>
           </div>
         </header>
+        
+        {/* Desktop navigation */}
+        <nav className="hidden md:flex md:flex-col md:space-y-1 px-4 sm:px-6 lg:px-8">
+          {navigation.map((item) => (
+            <Link
+              key={item.name}
+              to={item.href}
+              className={`flex items-center px-3 py-2 text-sm font-medium rounded-md ${
+                location.pathname === item.href
+                  ? 'bg-primary-dark text-white'
+                  : 'nav-text-inactive hover:bg-primary-dark hover:text-white'
+              }`}
+            >
+              <item.icon className="w-5 h-5 mr-3" aria-hidden="true" />
+              {item.name}
+            </Link>
+          ))}
+        </nav>
       </div>
 
       {/* Main content */}
@@ -72,23 +92,20 @@ export const SettingsLayout: React.FC = () => {
                 key={item.name}
                 to={item.href}
                 className={`flex flex-col items-center justify-center flex-1 h-full ${
-                  isActive
-                    ? 'text-primary dark:text-primary-light'
-                    : 'text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary-light'
+                  isActive ? 'nav-text-active' : 'nav-text-inactive'
                 }`}
               >
-                <Icon className="h-6 w-6" aria-hidden="true" />
-                <span className="text-xs mt-1">{item.name}</span>
+                <div className={`p-2 rounded-full mb-1 ${
+                  isActive ? 'nav-active-bg' : ''
+                }`}>
+                  <Icon className="h-6 w-6" aria-hidden="true" />
+                </div>
+                <span className="text-xs">
+                  {item.name}
+                </span>
               </Link>
             );
           })}
-          <Link
-            to="/settings"
-            className={`flex flex-col items-center justify-center flex-1 h-full text-primary dark:text-primary-light`}
-          >
-            <CogIcon className="h-6 w-6" aria-hidden="true" />
-            <span className="text-xs mt-1">Settings</span>
-          </Link>
         </div>
       </div>
     </div>

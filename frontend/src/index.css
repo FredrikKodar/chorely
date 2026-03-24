@@ -27,8 +27,34 @@
   color: var(--primary-color);
 }
 
+.text-primary-light {
+  color: var(--primary-light);
+}
+
 .border-primary {
   border-color: var(--primary-color);
+}
+
+/* Navigation-specific classes */
+.nav-text-inactive {
+  color: #6b7280; /* gray-500 */
+}
+
+.dark .nav-text-inactive {
+  color: #9ca3af; /* gray-400 */
+}
+
+.nav-text-active {
+  color: var(--primary-color);
+}
+
+/* Active navigation background - adapts to color scheme */
+.nav-active-bg {
+  background-color: color-mix(in srgb, var(--primary-color) 15%, transparent);
+}
+
+.dark .nav-active-bg {
+  background-color: color-mix(in srgb, var(--primary-color) 20%, transparent);
 }
 
 /* Dark mode overrides for color schemes */
@@ -46,15 +72,4 @@
 
 .dark .bg-emerald-700 {
   background-color: var(--primary-dark);
-}
-
-/* Ensure dark mode works with Tailwind's dark: variants */
-@media (prefers-color-scheme: dark) {
-  .dark .text-indigo-100 {
-    color: rgba(165, 180, 252, 0.8);
-  }
-  
-  .dark .text-emerald-100 {
-    color: rgba(101, 163, 138, 0.8);
-  }
 }
