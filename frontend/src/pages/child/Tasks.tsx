@@ -82,7 +82,8 @@ export const ChildTasks: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-end">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">My Tasks</h2>
         <button
           onClick={handleRefresh}
           disabled={refreshing}
@@ -112,7 +113,6 @@ export const ChildTasks: React.FC = () => {
       ) : (
         <TaskList
           tasks={tasks}
-          title="My Tasks"
           showToggle={true}
           onTaskToggle={handleTaskToggle}
         />

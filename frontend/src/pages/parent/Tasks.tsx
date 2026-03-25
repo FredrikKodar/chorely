@@ -79,7 +79,7 @@ export const TaskManagement: React.FC = () => {
         </PrimaryButton>
       </div>
 
-      <TaskList tasks={tasks} title="All Tasks" />
+      <TaskList tasks={tasks} />
       
       <TaskForm
         isOpen={isTaskFormOpen}

@@ -4,14 +4,12 @@ import { TaskReadResponse } from '../../types/tasks';
 
 interface TaskListProps {
   tasks: TaskReadResponse[];
-  title: string;
   showToggle?: boolean;
   onTaskToggle?: (taskId: number) => void;
 }
 
-export const TaskList: React.FC<TaskListProps> = ({ tasks, title, showToggle = false, onTaskToggle }) => (
+export const TaskList: React.FC<TaskListProps> = ({ tasks, showToggle = false, onTaskToggle }) => (
   <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-4">
-    <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">{title}</h2>
     {tasks.length === 0 ? (
       <div className="text-center py-8">
         <p className="text-gray-500 dark:text-gray-400">No tasks found</p>

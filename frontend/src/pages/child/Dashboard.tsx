@@ -75,7 +75,8 @@ export const ChildDashboard: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-end">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Dashboard</h2>
         <button
           onClick={handleRefresh}
           disabled={refreshing}
@@ -92,7 +93,8 @@ export const ChildDashboard: React.FC = () => {
           {state.user && (
             <UserDashboardCard user={state.user} className="mb-6" />
           )}
-          <TaskList tasks={tasks} title="My Tasks" showToggle={true} />
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">My Tasks</h2>
+          <TaskList tasks={tasks} showToggle={true} />
         </div>
         <div className="space-y-6">
           <TaskStatusChart tasks={tasks} />
