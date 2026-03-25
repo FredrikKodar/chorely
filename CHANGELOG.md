@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/FredrikKodar/rewards-app-backend/compare/v1.2.0...v1.2.1) (2026-03-25)
+
+
+### Bug Fixes
+
+* fix some layout bugs ([#36](https://github.com/FredrikKodar/rewards-app-backend/issues/36)) ([2834133](https://github.com/FredrikKodar/rewards-app-backend/commit/28341330b2845861f24284fc5617bc2f384d2403))
+
 ## [1.2.0](https://github.com/FredrikKodar/rewards-app-backend/compare/v1.1.0...v1.2.0) (2026-03-25)
 
 
