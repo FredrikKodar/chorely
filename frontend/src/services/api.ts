@@ -26,11 +26,11 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Redirect to login on auth errors (expired/invalid token)
+// Redirect to login when session has expired (401 Unauthorized)
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401 || error.response?.status === 403) {
+    if (error.response?.status === 401) {
       clearAuthToken();
       window.location.href = '/login';
     }
@@ -47,9 +47,6 @@ export const clearAuthToken = () => {
 export const handleApiError = (error: any): never => {
   if (error.response) {
     switch (error.response.status) {
-      case 401:
-        clearAuthToken();
-        throw new Error('UNAUTHORIZED: ' + (error.response.data.message || 'Invalid credentials'));
       case 403:
         throw new Error('Forbidden: You do not have permission to access this resource');
       case 404:

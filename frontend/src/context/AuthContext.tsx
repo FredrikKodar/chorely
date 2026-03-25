@@ -75,8 +75,9 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   };
   
   const refreshUser = async () => {
+    if (!state.user?.role) return;
     const userResponse = await userService.getCurrentUser();
-    dispatch({ type: 'UPDATE_USER', payload: { ...userResponse, role: state.user?.role! } });
+    dispatch({ type: 'UPDATE_USER', payload: { ...userResponse, role: state.user.role } });
   };
 
   const logout = () => {
