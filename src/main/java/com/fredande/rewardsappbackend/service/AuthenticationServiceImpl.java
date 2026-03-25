@@ -72,15 +72,15 @@ public class AuthenticationServiceImpl implements AuthenticationServiceDef {
 
     @Override
     public void registerParent(ParentRequest request) {
-        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+        if (userRepository.findByEmail(request.email()).isPresent()) {
             throw new EntityExistsException("Email already registered");
         }
         User user = new User();
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setEmail(request.getEmail());
+        user.setPassword(passwordEncoder.encode(request.password()));
+        user.setEmail(request.email());
         user.setRole(Role.PARENT);
-        user.setFirstName(request.getFirstName());
-        user.setLastName(request.getLastName());
+        user.setFirstName(request.firstName());
+        user.setLastName(request.lastName());
         userRepository.save(user);
     }
 
