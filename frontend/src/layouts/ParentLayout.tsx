@@ -1,13 +1,12 @@
 import React from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { HomeIcon, UsersIcon, ClipboardDocumentListIcon, ClockIcon, CogIcon } from '@heroicons/react/24/outline';
+import { HomeIcon, UsersIcon, ClipboardDocumentListIcon, CogIcon } from '@heroicons/react/24/outline';
 
 const navigation = [
   { name: 'Dashboard', href: '/parent/dashboard', icon: HomeIcon },
   { name: 'Children', href: '/parent/children', icon: UsersIcon },
   { name: 'Tasks', href: '/parent/tasks', icon: ClipboardDocumentListIcon },
-  { name: 'History', href: '/parent/history', icon: ClockIcon },
   { name: 'Settings', href: '/settings', icon: CogIcon },
 ];
 

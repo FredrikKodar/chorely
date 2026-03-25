@@ -40,13 +40,9 @@ export const taskService = {
   
   createTaskForChild: async (childId: number, taskData: TaskCreationRequest): Promise<TaskSavedResponse> => {
     try {
-      console.log('📤 Sending task creation request for child:', childId);
-      console.log('📄 Task data:', taskData);
       const response = await api.post(`/tasks/${childId}`, taskData);
-      console.log('📥 Task creation response:', response.data);
       return response.data;
     } catch (error) {
-      console.error('💥 Task creation API error:', error);
       return handleApiError(error);
     }
   },
@@ -71,12 +67,9 @@ export const taskService = {
   
   approveTask: async (taskId: number): Promise<TaskReadResponse> => {
     try {
-      console.log('👍 Approving task:', taskId);
       const response = await api.patch(`/tasks/${taskId}/approve`);
-      console.log('✅ Task approved:', response.data);
       return response.data;
     } catch (error) {
-      console.error('❌ Approval failed:', error);
       return handleApiError(error);
     }
   },

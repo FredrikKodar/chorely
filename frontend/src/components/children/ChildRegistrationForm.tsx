@@ -41,13 +41,10 @@ export const ChildRegistrationForm: React.FC<ChildRegistrationFormProps> = ({
     }
 
     try {
-      console.log('👶 Registering child with data:', formData);
       await authService.registerChild(formData);
-      console.log('✅ Child registered successfully');
       onChildRegistered();
       onClose();
     } catch (err) {
-      console.error('❌ Child registration failed:', err);
       setError(err instanceof Error ? err.message : 'An error occurred');
     } finally {
       setLoading(false);

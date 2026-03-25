@@ -4,12 +4,9 @@ import { AuthResponse } from '../types/auth';
 export const authService = {
   login: async (email: string, password: string): Promise<AuthResponse> => {
     try {
-      console.log('📡 Sending login request to:', api.defaults.baseURL + '/auth/login');
       const response = await api.post('/auth/login', { email, password });
-      console.log('📥 Login response:', response.data);
       return response.data;
     } catch (error) {
-      console.error('💥 Login API error:', error);
       return handleApiError(error);
     }
   },

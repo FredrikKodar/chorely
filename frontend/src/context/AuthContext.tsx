@@ -51,25 +51,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const login = async (email: string, password: string, isChildLogin: boolean = false) => {
     dispatch({ type: 'LOGIN_START' });
     try {
-      console.log('🔑 Attempting login with:', email);
-      
-      // Step 1: Get auth token
       const authResponse = await authService.login(email, password);
-      console.log('🔐 Auth response received:', authResponse);
-      
-      // Step 2: Set token for API calls
       setAuthToken(authResponse.token);
-      console.log('🔐 Token set:', authResponse.token.substring(0, 20) + '...');
-      
-      // Step 3: Parse role from response
       const role = parseRoleFromAuthResponse(authResponse.roles);
-      console.log('👤 Parsed role:', role);
-      
-      // Step 4: Get user data
       const userResponse = await userService.getCurrentUser();
-      console.log('📋 User data received:', userResponse);
-      
-      // Step 5: Create auth payload
       const payload = {
         user: {
           ...userResponse,
@@ -78,17 +63,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         token: authResponse.token,
         expiresIn: authResponse.expiresIn
       };
-      
-      console.log('✅ Login successful, dispatching success action');
       dispatch({ type: 'LOGIN_SUCCESS', payload: payload });
-      
-      // Navigate based on role
       const redirectPath = role === 'PARENT' ? '/parent/dashboard' : '/child/dashboard';
-      console.log('🚀 Redirecting to:', redirectPath);
       navigate(redirectPath);
-      
     } catch (error) {
-      console.error('❌ Login failed:', error);
       dispatch({ type: 'LOGIN_FAILURE', payload: error instanceof Error ? error.message : 'Login failed' });
       throw error;
     }

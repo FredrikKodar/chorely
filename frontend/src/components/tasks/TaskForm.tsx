@@ -26,22 +26,15 @@ export const TaskForm: React.FC<TaskFormProps> = ({ onClose, onTaskCreated, isOp
     setError(null);
 
     try {
-      console.log('📝 Creating task with data:', formData);
-      
       let createdTask;
       if (childId) {
-        console.log('📤 Creating task for child:', childId);
         createdTask = await taskService.createTaskForChild(childId, formData);
       } else {
-        console.log('📤 Creating task for current user');
         createdTask = await taskService.createTask(formData);
       }
-      console.log('✅ Task created successfully:', createdTask);
-      
       onTaskCreated(createdTask);
       onClose();
     } catch (err) {
-      console.error('❌ Task creation failed:', err);
       setError(err.message);
     } finally {
       setLoading(false);

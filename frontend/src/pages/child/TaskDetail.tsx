@@ -3,8 +3,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { taskService } from '../../services/taskService';
 import { TaskReadResponse } from '../../types/tasks';
-import { PrimaryButton, SecondaryButton } from '../../components/ui/Button';
-import { XMarkIcon, PencilIcon } from '@heroicons/react/24/outline';
+import { SecondaryButton } from '../../components/ui/Button';
+import { XMarkIcon } from '@heroicons/react/24/outline';
 import { TaskStatusBadge } from '../../components/tasks/TaskStatusBadge';
 import { TaskToggleButton } from '../../components/tasks/TaskToggleButton';
 
@@ -43,11 +43,6 @@ export const TaskDetail: React.FC = () => {
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update task');
     }
-  };
-
-  const handleEdit = () => {
-    // TODO: Implement edit functionality
-    console.log('Edit functionality to be implemented');
   };
 
   if (loading) {
@@ -162,12 +157,6 @@ export const TaskDetail: React.FC = () => {
         </div>
 
         <div className="flex gap-2 pt-4">
-          {state.user?.role === 'PARENT' && (
-            <PrimaryButton onClick={handleEdit}>
-              <PencilIcon className="w-5 h-5 mr-2" />
-              Edit Task
-            </PrimaryButton>
-          )}
           <SecondaryButton onClick={() => navigate('/child/dashboard')}>
             Back to Tasks
           </SecondaryButton>

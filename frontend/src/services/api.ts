@@ -33,12 +33,7 @@ export const clearAuthToken = () => {
 
 // Handle common error responses
 export const handleApiError = (error: any): never => {
-  console.error('🔴 API Error:', error);
-  
   if (error.response) {
-    console.error('📌 Status:', error.response.status);
-    console.error('📌 Data:', error.response.data);
-    
     switch (error.response.status) {
       case 401:
         clearAuthToken();
