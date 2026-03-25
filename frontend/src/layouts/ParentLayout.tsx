@@ -20,7 +20,7 @@ export const ParentLayout: React.FC = () => {
       <div className="bg-primary dark:bg-primary-dark pb-32">
         <header className="py-4 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           <div className="flex items-center">
-            <h1 className="text-white text-xl font-semibold">Parent Dashboard</h1>
+            <h1 className="text-white text-xl font-semibold">Chorely</h1>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-white text-sm">

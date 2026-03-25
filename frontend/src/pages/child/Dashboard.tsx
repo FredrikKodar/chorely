@@ -7,26 +7,42 @@ import { TaskStatusChart } from '../../components/dashboard/TaskStatusChart';
 import { TaskReadResponse } from '../../types/tasks';
 
 export const ChildDashboard: React.FC = () => {
-  const { state } = useAuth();
+  const { state, refreshUser } = useAuth();
   const [tasks, setTasks] = useState<TaskReadResponse[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const fetchTasks = async () => {
+    const tasksData = await taskService.getTasks();
+    setTasks(tasksData);
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await Promise.all([fetchTasks(), refreshUser()]);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to refresh');
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchTasks = async () => {
+    const loadTasks = async () => {
       try {
         setLoading(true);
-        const tasksData = await taskService.getTasks();
-        setTasks(tasksData);
+        await fetchTasks();
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to load tasks');
       } finally {
         setLoading(false);
       }
     };
-    
+
     if (state.user) {
-      fetchTasks();
+      loadTasks();
     }
   }, [state.user]);
 
@@ -58,7 +74,19 @@ export const ChildDashboard: React.FC = () => {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="space-y-6">
+      <div className="flex justify-end">
+        <button
+          onClick={handleRefresh}
+          disabled={refreshing}
+          className="flex items-center gap-1 text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 disabled:opacity-50"
+        >
+          <svg className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          {refreshing ? 'Refreshing...' : 'Refresh'}
+        </button>
+      </div>
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2">
           {state.user && (

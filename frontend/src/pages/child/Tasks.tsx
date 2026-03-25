@@ -8,6 +8,7 @@ export const ChildTasks: React.FC = () => {
   const { state } = useAuth();
   const [tasks, setTasks] = useState<TaskReadResponse[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const fetchTasks = async () => {
@@ -15,12 +16,22 @@ export const ChildTasks: React.FC = () => {
     setTasks(tasksData);
   };
 
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    try {
+      await fetchTasks();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to refresh tasks');
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
   const handleTaskToggle = async (taskId: number) => {
     try {
       await taskService.toggleStatus(taskId);
       await fetchTasks();
     } catch (err) {
-      console.error('Error toggling task status:', err);
       setError(err instanceof Error ? err.message : 'Failed to update task status');
     }
   };
@@ -31,7 +42,6 @@ export const ChildTasks: React.FC = () => {
         setLoading(true);
         await fetchTasks();
       } catch (err) {
-        console.error('Error loading tasks:', err);
         setError(err instanceof Error ? err.message : 'Failed to load tasks');
       } finally {
         setLoading(false);
@@ -72,9 +82,18 @@ export const ChildTasks: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-        My Tasks
-      </h2>
+      <div className="flex items-center justify-end">
+        <button
+          onClick={handleRefresh}
+          disabled={refreshing}
+          className="flex items-center gap-1 text-sm text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 disabled:opacity-50"
+        >
+          <svg className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+          </svg>
+          {refreshing ? 'Refreshing...' : 'Refresh'}
+        </button>
+      </div>
 
       {tasks.length === 0 ? (
         <div className="text-center py-12">

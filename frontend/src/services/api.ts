@@ -26,6 +26,18 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// Redirect to login on auth errors (expired/invalid token)
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401 || error.response?.status === 403) {
+      clearAuthToken();
+      window.location.href = '/login';
+    }
+    return Promise.reject(error);
+  }
+);
+
 // Clear token on 401 errors
 export const clearAuthToken = () => {
   authToken = null;

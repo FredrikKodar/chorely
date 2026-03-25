@@ -39,12 +39,7 @@ export const Register: React.FC = () => {
     try {
       await registerParent(email, password, firstName, lastName);
       setSuccess(true);
-      // Reset form
-      setEmail('');
-      setPassword('');
-      setConfirmPassword('');
-      setFirstName('');
-      setLastName('');
+      setTimeout(() => navigate('/login'), 2000);
     } catch (error) {
       setError(error instanceof Error ? error.message : 'Registration failed. Please try again.');
     } finally {
@@ -74,7 +69,7 @@ export const Register: React.FC = () => {
               </div>
               <div className="ml-3">
                 <p className="text-sm text-green-700 dark:text-green-300">
-                  Registration successful! You can now log in.
+                  Registration successful! Redirecting to sign in...
                 </p>
               </div>
             </div>
