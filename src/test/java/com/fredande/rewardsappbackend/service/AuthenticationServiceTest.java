@@ -120,7 +120,7 @@ class AuthenticationServiceTest {
         String password = "pass1234";
         ParentRequest request = new ParentRequest(email, password, FIRST_NAME, LAST_NAME);
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
-        when(userRepository.findByEmail(request.getEmail())).thenReturn(Optional.empty());
+        when(userRepository.findByEmail(request.email())).thenReturn(Optional.empty());
         when(passwordEncoder.encode(password)).thenReturn("encoded_password");
 
         //Act
