@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/FredrikKodar/rewards-app-backend/compare/v1.1.0...v1.2.0) (2026-03-25)
+
+
+### Features
+
+* add first and last names to registration ([#33](https://github.com/FredrikKodar/rewards-app-backend/issues/33)) ([a4d86e4](https://github.com/FredrikKodar/rewards-app-backend/commit/a4d86e449d15b18d4850c7046e3621d2c3bbf71f))
+
 ## [1.1.0](https://github.com/FredrikKodar/rewards-app-backend/compare/v1.0.1...v1.1.0) (2026-03-24)
 
 
