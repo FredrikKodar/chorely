@@ -13,7 +13,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class UserService {
@@ -89,12 +88,8 @@ public class UserService {
     @PreAuthorize("hasRole('PARENT')")
     public UserResponse updateUser(ParentUpdateRequest request, CustomUserDetails userDetails) {
         User savedUser = userRepository.findById(userDetails.getId()).orElseThrow();
-        if (!Objects.equals(request.firstName(), savedUser.getFirstName())) {
-            savedUser.setFirstName(request.firstName());
-        }
-        if (!Objects.equals(request.lastName(), savedUser.getLastName())) {
-            savedUser.setLastName(request.lastName());
-        }
+        savedUser.setFirstName(request.firstName());
+        savedUser.setLastName(request.lastName());
         return UserMapper.INSTANCE.userToUserResponse(userRepository.save(savedUser));
     }
 
