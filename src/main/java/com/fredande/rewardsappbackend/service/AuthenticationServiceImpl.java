@@ -3,7 +3,7 @@ package com.fredande.rewardsappbackend.service;
 import com.fredande.rewardsappbackend.config.CustomUserDetails;
 import com.fredande.rewardsappbackend.config.CustomUserDetailsService;
 import com.fredande.rewardsappbackend.dto.ChildRegistrationRequest;
-import com.fredande.rewardsappbackend.dto.ParentRequest;
+import com.fredande.rewardsappbackend.dto.ParentRegistrationRequest;
 import com.fredande.rewardsappbackend.enums.Role;
 import com.fredande.rewardsappbackend.model.User;
 import com.fredande.rewardsappbackend.repository.UserRepository;
@@ -71,7 +71,7 @@ public class AuthenticationServiceImpl implements AuthenticationServiceDef {
     }
 
     @Override
-    public void registerParent(ParentRequest request) {
+    public void registerParent(ParentRegistrationRequest request) {
         if (userRepository.findByEmail(request.email()).isPresent()) {
             throw new EntityExistsException("Email already registered");
         }

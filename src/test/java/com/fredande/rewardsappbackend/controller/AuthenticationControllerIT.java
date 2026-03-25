@@ -2,7 +2,7 @@ package com.fredande.rewardsappbackend.controller;
 
 import com.fredande.rewardsappbackend.TestcontainersConfig;
 import com.fredande.rewardsappbackend.dto.LoginRequest;
-import com.fredande.rewardsappbackend.dto.ParentRequest;
+import com.fredande.rewardsappbackend.dto.ParentRegistrationRequest;
 import com.fredande.rewardsappbackend.enums.Role;
 import com.fredande.rewardsappbackend.model.User;
 import com.fredande.rewardsappbackend.repository.UserRepository;
@@ -195,7 +195,7 @@ class AuthenticationControllerIT {
         // Arrange
         String email = "test@test.test";
         String password = "P@ss123456";
-        ParentRequest request = new ParentRequest(email, password, FIRST_NAME, LAST_NAME);
+        ParentRegistrationRequest request = new ParentRegistrationRequest(email, password, FIRST_NAME, LAST_NAME);
 
 
         // Act & Assert
@@ -215,7 +215,7 @@ class AuthenticationControllerIT {
         // Arrange
         String email = "test@test";
         String password = "P@ss123456";
-        ParentRequest request = new ParentRequest(email, password, FIRST_NAME, LAST_NAME);
+        ParentRegistrationRequest request = new ParentRegistrationRequest(email, password, FIRST_NAME, LAST_NAME);
 
 
         // Act & Assert
@@ -234,7 +234,7 @@ class AuthenticationControllerIT {
         // Arrange
         String email = "test@test.com";
         String password = "P@ss123456";
-        ParentRequest request = new ParentRequest(email, password, "", LAST_NAME);
+        ParentRegistrationRequest request = new ParentRegistrationRequest(email, password, "", LAST_NAME);
 
 
         // Act & Assert
@@ -253,7 +253,7 @@ class AuthenticationControllerIT {
         // Arrange
         String email = "test@test.com";
         String password = "P@ss123456";
-        ParentRequest request = new ParentRequest(email, password, null, LAST_NAME);
+        ParentRegistrationRequest request = new ParentRegistrationRequest(email, password, null, LAST_NAME);
 
 
         // Act & Assert
@@ -273,7 +273,7 @@ class AuthenticationControllerIT {
         // Arrange
         String email = "@test.test";
         String password = "P@ss123456";
-        ParentRequest request = new ParentRequest(email, password, FIRST_NAME, LAST_NAME);
+        ParentRegistrationRequest request = new ParentRegistrationRequest(email, password, FIRST_NAME, LAST_NAME);
 
 
         // Act & Assert
@@ -293,7 +293,7 @@ class AuthenticationControllerIT {
         // Arrange
         String email = "test@.test";
         String password = "P@ss123456";
-        ParentRequest request = new ParentRequest(email, password, FIRST_NAME, LAST_NAME);
+        ParentRegistrationRequest request = new ParentRegistrationRequest(email, password, FIRST_NAME, LAST_NAME);
 
 
         // Act & Assert
@@ -313,7 +313,7 @@ class AuthenticationControllerIT {
         // Arrange
         String email = "testtest.test";
         String password = "P@ss123456";
-        ParentRequest request = new ParentRequest(email, password, FIRST_NAME, LAST_NAME);
+        ParentRegistrationRequest request = new ParentRegistrationRequest(email, password, FIRST_NAME, LAST_NAME);
 
 
         // Act & Assert
@@ -333,7 +333,7 @@ class AuthenticationControllerIT {
         // Arrange
         String email = "test@testtest";
         String password = "P@ss123456";
-        ParentRequest request = new ParentRequest(email, password, FIRST_NAME, LAST_NAME);
+        ParentRegistrationRequest request = new ParentRegistrationRequest(email, password, FIRST_NAME, LAST_NAME);
 
 
         // Act & Assert
@@ -353,7 +353,7 @@ class AuthenticationControllerIT {
         // Arrange
         String email = "|test@testtest";
         String password = "P@ss123456";
-        ParentRequest request = new ParentRequest(email, password, FIRST_NAME, LAST_NAME);
+        ParentRegistrationRequest request = new ParentRegistrationRequest(email, password, FIRST_NAME, LAST_NAME);
 
 
         // Act & Assert
@@ -374,7 +374,7 @@ class AuthenticationControllerIT {
         // Arrange
         String email = "test@test.test";
         String password = "P@ss123";
-        ParentRequest request = new ParentRequest(email, password, FIRST_NAME, LAST_NAME);
+        ParentRegistrationRequest request = new ParentRegistrationRequest(email, password, FIRST_NAME, LAST_NAME);
 
 
         // Act & Assert
@@ -395,7 +395,7 @@ class AuthenticationControllerIT {
         // Arrange
         String email = "test@testtest";
         String password = "P@ss123456P@ss123456P@ss123456P@ss123456";
-        ParentRequest request = new ParentRequest(email, password, FIRST_NAME, LAST_NAME);
+        ParentRegistrationRequest request = new ParentRegistrationRequest(email, password, FIRST_NAME, LAST_NAME);
 
 
         // Act & Assert
@@ -414,7 +414,7 @@ class AuthenticationControllerIT {
         // Arrange
         String email = "";
         String password = "P@ss123456";
-        ParentRequest request = new ParentRequest(email, password, FIRST_NAME, LAST_NAME);
+        ParentRegistrationRequest request = new ParentRegistrationRequest(email, password, FIRST_NAME, LAST_NAME);
 
 
         // Act & Assert
@@ -433,7 +433,7 @@ class AuthenticationControllerIT {
         // Arrange
         String email = "test@test.test";
         String password = "";
-        ParentRequest request = new ParentRequest(email, password, FIRST_NAME, LAST_NAME);
+        ParentRegistrationRequest request = new ParentRegistrationRequest(email, password, FIRST_NAME, LAST_NAME);
 
 
         // Act & Assert

@@ -3,7 +3,7 @@ package com.fredande.rewardsappbackend.dto;
 import com.fredande.rewardsappbackend.constants.ValidationConstants;
 import jakarta.validation.constraints.*;
 
-public record ParentRequest(
+public record ParentRegistrationRequest(
         @NotNull
         @Pattern(regexp = ValidationConstants.EMAIL_REGEX,
                 message = "Malformed email address")
@@ -20,4 +20,6 @@ public record ParentRequest(
 
         @NotBlank(message = "Last name is required")
         String lastName
-) {}
+) {
+
+}

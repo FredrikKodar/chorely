@@ -4,7 +4,7 @@ import com.fredande.rewardsappbackend.config.CustomUserDetails;
 import com.fredande.rewardsappbackend.dto.AuthResponse;
 import com.fredande.rewardsappbackend.dto.ChildRegistrationRequest;
 import com.fredande.rewardsappbackend.dto.LoginRequest;
-import com.fredande.rewardsappbackend.dto.ParentRequest;
+import com.fredande.rewardsappbackend.dto.ParentRegistrationRequest;
 import com.fredande.rewardsappbackend.service.AuthenticationServiceDef;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatusCode;
@@ -40,8 +40,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerParent(@RequestBody @Valid ParentRequest parentRequest) {
-        authService.registerParent(parentRequest);
+    public ResponseEntity<String> registerParent(@RequestBody @Valid ParentRegistrationRequest parentRegistrationRequest) {
+        authService.registerParent(parentRegistrationRequest);
         return ResponseEntity.status(HttpStatusCode.valueOf(201)).body("User registered successfully");
     }
 

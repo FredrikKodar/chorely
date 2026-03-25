@@ -4,7 +4,7 @@ import com.fredande.rewardsappbackend.config.CustomUserDetails;
 import com.fredande.rewardsappbackend.config.CustomUserDetailsService;
 import com.fredande.rewardsappbackend.dto.ChildRegistrationRequest;
 import com.fredande.rewardsappbackend.dto.LoginRequest;
-import com.fredande.rewardsappbackend.dto.ParentRequest;
+import com.fredande.rewardsappbackend.dto.ParentRegistrationRequest;
 import com.fredande.rewardsappbackend.model.User;
 import com.fredande.rewardsappbackend.repository.UserRepository;
 import jakarta.persistence.EntityExistsException;
@@ -118,7 +118,7 @@ class AuthenticationServiceTest {
         //Arrange
         String email = "test@test.test";
         String password = "pass1234";
-        ParentRequest request = new ParentRequest(email, password, FIRST_NAME, LAST_NAME);
+        ParentRegistrationRequest request = new ParentRegistrationRequest(email, password, FIRST_NAME, LAST_NAME);
         ArgumentCaptor<User> userCaptor = ArgumentCaptor.forClass(User.class);
         when(userRepository.findByEmail(request.email())).thenReturn(Optional.empty());
         when(passwordEncoder.encode(password)).thenReturn("encoded_password");
@@ -146,7 +146,7 @@ class AuthenticationServiceTest {
         //Arrange
         String email = "test@test.test";
         String password = "pass1234";
-        ParentRequest request = new ParentRequest(email, password, FIRST_NAME, LAST_NAME);
+        ParentRegistrationRequest request = new ParentRegistrationRequest(email, password, FIRST_NAME, LAST_NAME);
         User existingUser = new User();
         existingUser.setEmail(email);
         when(userRepository.findByEmail(email)).thenReturn(Optional.of(existingUser));
