@@ -1,6 +1,7 @@
 package com.fredande.rewardsappbackend.exceptionhandler;
 
 import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,11 @@ public class CustomExceptionHandler {
     @ExceptionHandler(EntityExistsException.class)
     public ResponseEntity<?> handleEntityExistsException(EntityExistsException exception) {
         return ResponseEntity.status(400).body(exception.getMessage());
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    public ResponseEntity<String> handleEntityNotFoundException(EntityNotFoundException exception) {
+        return ResponseEntity.status(404).body("Resource not found");
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

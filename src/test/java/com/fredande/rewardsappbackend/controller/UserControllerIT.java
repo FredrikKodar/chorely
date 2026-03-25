@@ -85,9 +85,9 @@ class UserControllerIT {
     }
 
     /**
-     * Log in as a registered user, obtain a JWT token and attempt to get another user's info.
+     * Log in as a registered user, obtain a JWT token and attempt to get a non-existent user's info.
      *
-     * @Expected: Status code 400 Bad Request.
+     * @Expected: Status code 404 Not Found.
      */
     @Test
     void withValidJWT_invalid_get_invalidId() {
@@ -105,10 +105,10 @@ class UserControllerIT {
                         "http://localhost:" + port + "/api/users/" + (user.getId() - 1),
                         HttpMethod.GET,
                         request,
-                        UserResponse.class);
+                        String.class);
 
         // Assert
-        assertEquals(403, response.getStatusCode().value());
+        assertEquals(404, response.getStatusCode().value());
 
     }
 
