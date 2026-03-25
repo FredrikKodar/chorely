@@ -366,8 +366,7 @@ class AuthenticationControllerIT {
 
 
     /**
-     * Registering with an invalid email and password should return 400.
-     * Malformed email using a character that is not permitted.
+     * Registering with a password shorter than the minimum should return 400.
      */
     @Test
     void register_Parent_invalid_password_tooShort() throws Exception {
@@ -387,14 +386,13 @@ class AuthenticationControllerIT {
 
 
     /**
-     * Registering with an invalid email and password should return 400.
-     * Malformed email using a character that is not permitted.
+     * Registering with a password longer than the maximum should return 400.
      */
     @Test
     void register_Parent_invalid_password_tooLong() throws Exception {
         // Arrange
-        String email = "test@testtest";
-        String password = "P@ss123456P@ss123456P@ss123456P@ss123456";
+        String email = "test@test.test";
+        String password = "P@ss123456P@ss123456P@ss123456P@ss123456P"; // 41 chars
         ParentRegistrationRequest request = new ParentRegistrationRequest(email, password, FIRST_NAME, LAST_NAME);
 
 
@@ -403,7 +401,7 @@ class AuthenticationControllerIT {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().is(400))
-                .andExpect(content().string("Malformed email address"));
+                .andExpect(content().string("Password must be 8 to 40 characters"));
     }
 
     /**
