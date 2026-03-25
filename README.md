@@ -1,7 +1,6 @@
-# Rewards App Backend
+# Rewards App
 
-A Spring Boot REST API for managing a family reward system where parents can assign tasks to children and track their
-progress.
+A family reward system where parents assign tasks to children and track their progress. Children earn points by completing tasks, which parents approve.
 
 ## Table of Contents
 
@@ -10,14 +9,10 @@ progress.
 * [Features](#features)
 * [Technology Stack](#technology-stack)
 * [Quick Start](#quick-start)
-    * [Prerequisites](#prerequisites)
-    * [Running the Application](#running-the-application)
-        * [Development Profile (Recommended for local development)](#development-profile-recommended-for-local-development)
-        * [Production Profile](#production-profile)
-* [Project Structure](#project-structure)
+    * [Backend](#backend)
+    * [Frontend](#frontend)
+* [CI/CD](#cicd)
 * [Documentation](#documentation)
-    * [API Documentation](#api-documentation)
-    * [Testing Documentation](#testing-documentation)
 * [Troubleshooting](#troubleshooting)
     * [Application connects to wrong database](#application-connects-to-wrong-database)
     * [Missing environment variables error](#missing-environment-variables-error)
@@ -34,26 +29,28 @@ progress.
 
 ## Technology Stack
 
+### Backend
+
 - **Spring Boot 4**
 - **Spring Security** with JWT authentication
 - **Spring Data JPA**
-- **MySQL database**
+- **MySQL**
 - **Maven**
-- **Mockito**
-- **JUnit**
-- **Mapstruct**
+- **Mockito / JUnit**
+- **MapStruct**
+- **Testcontainers**
+
+### Frontend
+
+- **React 18** with **TypeScript**
+- **Vite**
+- **Tailwind CSS**
+- **Axios**
+- **React Router v6**
 
 ## Quick Start
 
-### Prerequisites
-
-- Java 21+
-- Maven 3.6+
-- MySQL 8.0+
-
-### Running the Application
-
-#### Development Profile (Recommended for local development)
+### Backend
 
 1. **Set environment variables:**
 
@@ -66,60 +63,47 @@ export SECRET_KEY=your-secret-key-at-least-256-bits
 export JWT_EXPIRES_IN=86400000
 ```
 
-2. **Run with dev profile:**
+2. **Run:**
 
 ```bash
 mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
 
-#### Production Profile
+Backend runs on `http://localhost:8080`.
 
-For production, use the default profile (no profile specified) and ensure environment variables are set in your
-deployment environment.
+### Frontend
 
 ```bash
-unset SPRING_PROFILES_ACTIVE
-export DB_DEV_URL=jdbc:mysql://localhost:3306/your_dev_database
-export DB_USER=your_username
-export DB_PASSWORD=your_password
-export SECRET_KEY=your-secret-key-at-least-256-bits
-export JWT_EXPIRES_IN=86400000
-mvn spring-boot:run
+cd frontend
+npm install
+npm run dev
 ```
 
-Application runs on `http://localhost:8080`
+Frontend dev server runs on `http://localhost:3000` and proxies API requests to the backend.
 
-## Project Structure
+## CI/CD
 
-```
-src/
-├── main/
-│   ├── java/com/fredande/rewardsappbackend/
-│   │   ├── config/                     # Configuration
-│   │   ├── controller/                 # REST controllers
-│   │   ├── dto/                        # Data transfer objects
-│   │   ├── enums/                      # Enumerations
-│   │   ├── exceptionhandler/           # Exception handling
-│   │   ├── mapper/                     # Mappers
-│   │   ├── model/                      # Entity models
-│   │   ├── repository/                 # Data access layer
-│   │   ├── security/                   # Security configuration
-│   │   └── service/                    # Business logic
-│   └── resources/
-│       └── application.properties      # Configuration for production environment
-│       └── application-test.properties # Configuration for testing environment
-└── test/
-    └── java/com/fredande/rewardsappbackend/
-        ├── controller/                 # Controller integration tests
-        ├── service/                    # Service unit tests
-        └── testUtils/                  # Helper classes for testing
-```
+### Release flow
+
+This project uses [Release Please](https://github.com/googleapis/release-please) for automated versioning and releases.
+
+1. Every merge to `main` triggers Release Please, which creates or updates a release PR that bumps the version and updates the changelog.
+2. Merging the release PR publishes a GitHub release.
+3. Publishing a release triggers the **Deploy to Elastic Beanstalk** workflow, which:
+   - Builds the frontend (`npm run build` in `frontend/`)
+   - Builds the backend JAR with the frontend embedded (`./mvnw clean package`)
+   - Deploys the JAR to AWS Elastic Beanstalk (`eu-north-1`, application `chorely`)
+
+### Other workflows
+
+- **Unit tests** — run on every push
+- **Integration tests** — run on every push using Testcontainers (Docker-based)
 
 ## Documentation
 
-### [API Documentation](docs/API.md)
-
-### [Testing Documentation](docs/TESTS.md)
+- [Backend API Reference](docs/backend/API.md)
+- [Frontend Overview](docs/frontend/OVERVIEW.md)
+- [Testing Guide](docs/backend/TESTS.md)
 
 ## Troubleshooting
 
@@ -151,4 +135,4 @@ echo $SPRING_PROFILES_ACTIVE
 ### Missing environment variables error
 
 If you see errors like `Could not resolve placeholder 'DB_URL'`, ensure all required environment variables are set.
-See each run case for specific settings.
+See the [Backend Quick Start](#backend) section for the full list.

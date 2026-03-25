@@ -1,6 +1,6 @@
 # API Documentation
 
-**[Back to main project page](../README.md)**
+**[Back to main project page](../../README.md)**
 
 ## Table of Contents
 
@@ -15,6 +15,7 @@
     * [Get Current User](#get-current-user)
     * [Get User by ID](#get-user-by-id)
     * [Get Children](#get-children)
+    * [Update Parent User](#update-parent-user)
 * [Task Endpoints](#task-endpoints)
     * [Create Task (on Parent)](#create-task-on-parent)
     * [Create Task for Child](#create-task-for-child)
@@ -80,7 +81,9 @@ http://localhost:8080/api
 ```json
 {
   "email": "parent@example.com",
-  "password": "securePassword123"
+  "password": "securePassword123",
+  "firstName": "John",
+  "lastName": "Doe"
 }
 ```
 
@@ -88,6 +91,7 @@ http://localhost:8080/api
 
 - Email must match regex: `^[a-zA-Z0-9_+&*-]+(?:\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,7}$`
 - Password must be 8-40 characters
+- First name and last name must not be blank
 
 **Response (201 Created):**
 
@@ -200,6 +204,43 @@ http://localhost:8080/api
     "firstName": "Sarah"
   }
 ]
+```
+
+---
+
+### Update Parent User
+
+| Method | Endpoint  | Description                              | Authentication Required |
+|--------|-----------|------------------------------------------|-------------------------|
+| PATCH  | `/users`  | Update the authenticated parent's names | Yes (Parent)            |
+
+**Request Body:**
+
+```json
+{
+  "firstName": "John",
+  "lastName": "Doe"
+}
+```
+
+**Validation:**
+
+- First name and last name must not be blank
+
+**Response (200 OK):**
+
+```json
+{
+  "id": 1,
+  "email": "parent@example.com",
+  "firstName": "John",
+  "lastName": "Doe",
+  "currentPoints": 0,
+  "totalPoints": 0,
+  "numTasksOpen": 0,
+  "numTasksCompleted": 0,
+  "numTasksTotal": 0
+}
 ```
 
 ---
@@ -514,77 +555,3 @@ Obtain the token via the `/auth/login` endpoint.
 - **Expiration**: Token expires after 86400 seconds (24 hours)
 - **Refresh**: No automatic refresh - user must login again after expiration
 - **Roles**: Token contains user roles/authorities
-
-### ✅ RESOLVED: User ID Requirement
-
-**Status**: IMPLEMENTED ✨
-
-The `/api/users/me` endpoint has been added to the backend, resolving the user ID requirement for the frontend login flow.
-
-#### Implementation Details:
-
-**Backend Endpoint**: `GET /api/users/me`
-```java
-@GetMapping("/me")
-public UserResponse getCurrentUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
-    return userService.getUserById(userDetails.getId());
-}
-```
-
-**DTO Update**: `UserResponse.java` now includes `id` field
-```java
-public record UserResponse(Integer id,  // ✅ Added
-                           String email,
-                           String firstName,
-                           String lastName,
-                           Integer currentPoints,
-                           Integer totalPoints,
-                           Integer numTasksOpen,
-                           Integer numTasksCompleted,
-                           Integer numTasksTotal) {}
-```
-
-#### Frontend Integration:
-
-**Updated Login Flow**:
-```typescript
-// services/userService.ts
-getCurrentUser: async (): Promise<UserResponse> => {
-  const response = await api.get('/users/me');
-  return response.data; // Now includes id field
-}
-
-// context/AuthContext.tsx
-const login = async (email, password) => {
-  const authResponse = await authService.login(email, password);
-  setAuthToken(authResponse.token);
-  
-  // ✅ Now works - no more fallback needed!
-  const userResponse = await userService.getCurrentUser();
-  setCurrentUserId(userResponse.id); // Proper user ID
-  
-  const role = parseRoleFromAuthResponse(authResponse.roles);
-  
-  dispatch({ type: 'LOGIN_SUCCESS', payload: {
-    user: { ...userResponse, role },
-    token: authResponse.token,
-    expiresIn: authResponse.expiresIn
-  } });
-};
-```
-
-#### Benefits:
-- ✅ **Production-Ready**: No more temporary workarounds
-- ✅ **Clean Architecture**: Proper separation of concerns
-- ✅ **Type Safety**: Complete UserResponse with all fields
-- ✅ **Maintainable**: Standard REST pattern
-
-#### Frontend Updates Required:
-1. ✅ Remove temporary fallback logic
-2. ✅ Use `getCurrentUser()` directly
-3. ✅ Remove `fallbackUserId` workarounds
-4. ✅ Update error handling for cleaner code
-
-**The login flow is now production-ready!** 🎉
-
----

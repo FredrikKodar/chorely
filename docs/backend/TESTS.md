@@ -1,6 +1,6 @@
 # Testing
 
-**[Back to main project page](../README.md)**
+**[Back to main project page](../../README.md)**
 
 ## Table of Contents
 
@@ -51,19 +51,7 @@ src/test/java/com/fredande/rewardsappbackend/
 
 ### Prerequisites
 
-Before running integration tests, create a test database. Note that create-drop is used, so the data will be dropped
-when test run is completed.
-
-Tests require environment variables for database connection. Set them before running tests:
-
-```bash
-export SPRING_PROFILES_ACTIVE=test
-export DB_TEST_URL=jdbc:mysql://localhost:3306/your_test_database
-export DB_USER=your_username
-export DB_PASSWORD=your_password
-export SECRET_KEY=your-test-secret-key
-export JWT_EXPIRES_IN=86400000
-```
+Integration tests use **Testcontainers** to spin up a real MySQL database automatically. The only requirement is that **Docker is running** — no manual database setup or environment variables are needed.
 
 ### Run Unit Tests
 
@@ -133,6 +121,10 @@ request/response cycle, including generation and validation of JWT tokens.
 
 - ✅ Get user by ID
 - ✅ Get children for parent
+- ✅ Update user with valid names
+- ✅ Update user without authentication (403)
+- ✅ Update user with blank first name (400)
+- ✅ Update user with blank last name (400)
 - ✅ Authorization checks
 
 ## Running Tests in CI/CD
