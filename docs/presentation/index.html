@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="sv">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Chorely Presentation</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Urbanist:wght@300;400;600;700&family=Inter:wght@300;400;500&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        />
+        <style>
+            :root {
+                --brand-color: #818cf8;
+                --bg-dark: #111827;
+                --card-bg: #1f2937;
+                --text-main: #f9fafb;
+                --text-muted: #9ca3af;
+                --accent-green: #4ade80;
+                --accent-blue: #61dbfb;
+                --accent-orange: #ff9900;
+            }
+
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            body {
+                background-color: #030712;
+                color: var(--text-main);
+                font-family: "Inter", sans-serif;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 100px;
+                padding: 100px 0;
+            }
+
+            .slide-container {
+                width: 1280px;
+                height: 720px;
+                background-color: var(--bg-dark);
+                overflow: hidden;
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                padding: 80px;
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                flex-shrink: 0;
+            }
+
+            .slide-container > * {
+                z-index: 1;
+                position: relative;
+            }
+
+            h1,
+            h2,
+            h3 {
+                font-family: "Urbanist", sans-serif;
+                font-weight: 700;
+            }
+            .slide-title {
+                font-size: 52px;
+                margin-bottom: 50px;
+                color: var(--brand-color);
+                font-weight: 700;
+                border-bottom: 2px solid rgba(129, 140, 248, 0.2);
+                padding-bottom: 10px;
+                display: inline-block;
+            }
+
+            .content-area {
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                width: 100%;
+            }
+
+            /* Slide 1 - Titel */
+            .slide-header-accent {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 120px;
+                background-color: var(--brand-color);
+                opacity: 0.9;
+                z-index: 0;
+            }
+            .title-layout {
+                text-align: left;
+            }
+            .title-layout h1 {
+                font-size: 110px;
+                line-height: 1;
+                letter-spacing: -3px;
+                margin-bottom: 10px;
+            }
+            .subtitle {
+                font-size: 36px;
+                color: var(--brand-color);
+                font-weight: 300;
+            }
+
+            /* Slide 2 - Problemet */
+            .problem-layout {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 60px;
+                align-items: center;
+            }
+            .image-placeholder {
+                background: var(--card-bg);
+                border-radius: 20px;
+                height: 450px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                border: 2px solid rgba(255, 255, 255, 0.1);
+                color: var(--brand-color);
+                overflow: hidden;
+            }
+            .image-placeholder img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+            .problem-text {
+                font-size: 38px;
+                line-height: 1.3;
+                color: var(--text-main);
+                font-weight: 400;
+                font-style: italic;
+            }
+
+            /* Slide 3 Arkitektur */
+            .diagram-wrapper {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 40px;
+                margin-bottom: 60px;
+            }
+            .node {
+                background: var(--card-bg);
+                border: 2px solid rgba(255, 255, 255, 0.05);
+                padding: 50px 20px;
+                border-radius: 24px;
+                text-align: center;
+                width: 280px;
+                transition: all 0.3s ease;
+            }
+            .node:hover {
+                border-color: var(--brand-color);
+                transform: translateY(-5px);
+            }
+            .node i {
+                font-size: 60px;
+                margin-bottom: 25px;
+                display: block;
+            }
+            .node h4 {
+                font-size: 32px;
+                color: var(--text-main);
+                font-family: "Urbanist", sans-serif;
+            }
+            .arrow {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+                width: 120px;
+            }
+            .arrow-line {
+                height: 2px;
+                background: rgba(156, 163, 175, 0.3);
+                width: 100%;
+                position: relative;
+            }
+            .arrow-line::after {
+                content: "▶";
+                position: absolute;
+                right: -5px;
+                top: -10px;
+                color: rgba(156, 163, 175, 0.3);
+                font-size: 12px;
+            }
+            .jwt-tag {
+                background: #f59e0b;
+                color: #000;
+                font-size: 16px;
+                font-weight: 900;
+                padding: 4px 14px;
+                border-radius: 4px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+            /* Slide 4, 5 & 6 - Minimalistisk */
+            .minimal-center {
+                text-align: center;
+                justify-content: center;
+                height: 100%;
+            }
+            .minimal-center h2 {
+                font-size: 180px;
+                letter-spacing: -5px;
+                color: var(--text-main);
+            }
+            .minimal-center hr {
+                width: 100px;
+                height: 6px;
+                background: var(--brand-color);
+                border: none;
+                margin: 30px auto;
+            }
+
+            /* Framtida planer (Ny Layout) */
+            .plan-list {
+                list-style: none;
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+            .plan-item {
+                background: rgba(129, 140, 248, 0.05);
+                border: 1px solid rgba(129, 140, 248, 0.2);
+                padding: 30px;
+                border-radius: 20px;
+                display: flex;
+                align-items: flex-start;
+                gap: 20px;
+            }
+            .plan-item i {
+                font-size: 28px;
+                color: var(--brand-color);
+                margin-top: 5px;
+            }
+            .plan-item h3 {
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+            .plan-item p {
+                color: var(--text-muted);
+                font-size: 18px;
+                line-height: 1.4;
+            }
+
+            /* Slide 7 - Reflektion */
+            .reflection-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 40px;
+            }
+            .reflection-card {
+                background: var(--card-bg);
+                padding: 40px;
+                border-radius: 24px;
+                border: 1px solid rgba(255, 255, 255, 0.05);
+            }
+            .reflection-card h3 {
+                font-size: 28px;
+                margin-bottom: 20px;
+                color: var(--brand-color);
+            }
+            .reflection-card p {
+                font-size: 20px;
+                color: var(--text-muted);
+                line-height: 1.5;
+            }
+            .reflection-card strong {
+                color: var(--text-main);
+            }
+
+            .status-bar {
+                position: absolute;
+                bottom: 30px;
+                left: 80px;
+                font-size: 14px;
+                color: var(--brand-color);
+                text-transform: uppercase;
+                letter-spacing: 2px;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- 01: TITEL -->
+        <div class="slide-container" id="slide1">
+            <div class="slide-header-accent"></div>
+            <div class="title-layout content-area">
+                <h1>Chorely</h1>
+                <p class="subtitle">Ett belöningssystem för hela familjen</p>
+            </div>
+            <div class="status-bar">01 // Introduktion</div>
+        </div>
+
+        <!-- 02: PROBLEMET -->
+        <div class="slide-container" id="slide2">
+            <h2 class="slide-title">Problemet</h2>
+            <div class="content-area">
+                <div class="problem-layout">
+                    <div class="image-placeholder">
+                        <img src="list.jpeg" alt="Problembeskrivning" />
+                    </div>
+                    <div class="problem-text">
+                        "Vi gör redan det här hemma — bara inte särskilt
+                        effektivt."
+                    </div>
+                </div>
+            </div>
+            <div class="status-bar">02 // Utmaningen</div>
+        </div>
+
+        <!-- 03: LIVE DEMO -->
+        <div class="slide-container" id="slide3">
+            <div class="minimal-center content-area">
+                <h2>Demo</h2>
+                <hr />
+            </div>
+            <div class="status-bar">03 // Live Demo</div>
+        </div>
+
+        <!-- 04: ARKITEKTUR -->
+        <div class="slide-container" id="slide4">
+            <h2 class="slide-title">Arkitektur</h2>
+            <div class="content-area">
+                <div class="diagram-wrapper">
+                    <div class="node">
+                        <i
+                            class="fa-brands fa-react"
+                            style="color: var(--accent-blue)"
+                        ></i>
+                        <h4>React</h4>
+                    </div>
+                    <div class="arrow">
+                        <span class="jwt-tag">JWT</span>
+                        <div class="arrow-line"></div>
+                    </div>
+                    <div class="node">
+                        <i
+                            class="fa-solid fa-leaf"
+                            style="color: var(--accent-green)"
+                        ></i>
+                        <h4>Spring Boot</h4>
+                    </div>
+                    <div class="arrow">
+                        <div class="arrow-line"></div>
+                    </div>
+                    <div class="node">
+                        <i
+                            class="fa-solid fa-database"
+                            style="color: #51799c"
+                        ></i>
+                        <h4>MySQL</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="status-bar">04 // Stack</div>
+        </div>
+
+        <!-- 05: CODE & CI/CD -->
+        <div class="slide-container" id="slide5">
+            <div class="minimal-center content-area">
+                <h2>GitHub</h2>
+                <hr />
+            </div>
+            <div class="status-bar">05 // Kod & CI/CD</div>
+        </div>
+
+        <!-- 06: FRAMTIDA PLANER -->
+        <div class="slide-container" id="slide6">
+            <h2 class="slide-title">Framtida planer</h2>
+            <div class="content-area">
+                <div class="plan-list">
+                    <div class="plan-item">
+                        <i class="fa-solid fa-rotate"></i>
+                        <div>
+                            <h3>Refresh tokens</h3>
+                            <p>
+                                Förbättra användarupplevelsen genom refresh
+                                tokens och minska behovet av att logga in igen
+                                när JTW löper ut.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="plan-item">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        <div>
+                            <h3>Använda poäng</h3>
+                            <p>
+                                Implementera funktionalitet för att kunna
+                                använda de poäng som tjänats ihop. Föräldrar ska
+                                kunna skapa "produkter".
+                            </p>
+                        </div>
+                    </div>
+                    <div class="plan-item">
+                        <i class="fa-solid fa-users"></i>
+                        <div>
+                            <h3>Införa grupper</h3>
+                            <p>
+                                Utöka användbarheten genom att införa grupper,
+                                inte bara ha förälder-barn-relationen mellan
+                                användare.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="plan-item">
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+                        <div>
+                            <h3>Mobilapp (PWA)</h3>
+                            <p>
+                                Göra Chorely tillgänglig som en installerbar app
+                                för ännu snabbare åtkomst i farten.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="status-bar">06 // Roadmap</div>
+        </div>
+
+        <!-- 07: REFLEKTION -->
+        <div class="slide-container" id="slide7">
+            <h2 class="slide-title">Reflektion</h2>
+            <div class="content-area">
+                <div class="reflection-grid">
+                    <div class="reflection-card">
+                        <h3>Testa Spring Security</h3>
+                        <p>
+                            <strong>End-to-end-säkerhet:</strong> Att bara testa
+                            med mocks går förbi filterkedjan. Genom att använda
+                            en
+                            <strong>MySQL-instans med Testcontainers</strong>
+                            kan jag köra riktiga integrationstester och
+                            verifiera att säkerheten håller hela vägen.
+                        </p>
+                    </div>
+                    <div class="reflection-card">
+                        <h3>Agentdriven utveckling</h3>
+                        <p>
+                            <strong>AI-utvecklad frontend:</strong> Trots
+                            noggrant arbete med att skapa överenskomna
+                            arbetsflöden frångick
+                            <strong>Mistral Vibe</strong> ofta dessa och agerade
+                            på egen hand, vilket introducerade buggar och
+                            skapade frustration när många uppgifter behövde
+                            korrigeras.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="status-bar">07 // Erfarenheter</div>
+        </div>
+    </body>
+</html>
