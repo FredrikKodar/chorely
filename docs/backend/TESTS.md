@@ -35,7 +35,7 @@ repository) to ensure comprehensive coverage of business logic and API behavior.
 ## Test Structure
 
 ```
-src/test/java/com/fredande/rewardsappbackend/
+src/test/java/com/fredrikkodar/chorely/
 ├── controller/
 │   ├── AuthenticationControllerIT.java
 │   ├── TaskControllerIT.java
@@ -51,7 +51,8 @@ src/test/java/com/fredande/rewardsappbackend/
 
 ### Prerequisites
 
-Integration tests use **Testcontainers** to spin up a real MySQL database automatically. The only requirement is that **Docker is running** — no manual database setup or environment variables are needed.
+Integration tests use **Testcontainers** to spin up a real MySQL database automatically. The only requirement is that *
+*Docker is running** — no manual database setup or environment variables are needed.
 
 ### Run Unit Tests
 

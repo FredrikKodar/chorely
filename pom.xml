@@ -8,11 +8,11 @@
         <version>4.0.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.fredande</groupId>
-    <artifactId>rewards-app-backend</artifactId>
+    <groupId>com.fredrikkodar</groupId>
+    <artifactId>chorely</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>rewards-app-backend</name>
-    <description>rewards-app-backend</description>
+    <name>chorely</name>
+    <description>Family task tracking app</description>
     <url/>
     <licenses>
         <license/>

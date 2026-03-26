@@ -1,33 +1,14 @@
-name: Workflow to run tests on pull request to main, with a Docker image MYSQL database
+name: Run tests on pull request to main
 on:
   pull_request:
     branches:
       - main
 jobs:
-  build-with-docker:
+  build:
     runs-on: ubuntu-latest
-
-    services:
-      mysql:
-        image: mysql:8.0
-        env:
-          MYSQL_USER: test_user
-          MYSQL_PASSWORD: test_password
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: rewards_app_test
-        ports:
-          - 3306:3306
-        options: >-
-          --health-cmd="mysqladmin ping --silent"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
 
     env:
       SPRING_PROFILES_ACTIVE: test
-      DB_TEST_URL: jdbc:mysql://127.0.0.1:3306/rewards_app_test
-      DB_USER: test_user
-      DB_PASSWORD: test_password
       SECRET_KEY: ${{ secrets.SECRET_KEY }}
       JWT_EXPIRES_IN: "3600000"
 
@@ -39,12 +20,5 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
-      - name: Wait for MySQL image
-        run: |
-          echo "Waiting for MySQL image..."
-          for i in {1..30}; do
-          nc -z localhost 3306 && echo "MySQL image is ready and running!" && break
-          sleep 2
-          done
       - name: Build and test with Maven
         run: mvn clean verify

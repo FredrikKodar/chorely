@@ -1,6 +1,7 @@
-# Rewards App
+# Chorely
 
-A family reward system where parents assign tasks to children and track their progress. Children earn points by completing tasks, which parents approve.
+A family task tracking system where parents assign tasks to children and track their progress. Children earn points by
+completing tasks, which parents approve.
 
 ## Table of Contents
 
@@ -87,12 +88,13 @@ Frontend dev server runs on `http://localhost:3000` and proxies API requests to 
 
 This project uses [Release Please](https://github.com/googleapis/release-please) for automated versioning and releases.
 
-1. Every merge to `main` triggers Release Please, which creates or updates a release PR that bumps the version and updates the changelog.
+1. Every merge to `main` triggers Release Please, which creates or updates a release PR that bumps the version and
+   updates the changelog.
 2. Merging the release PR publishes a GitHub release.
 3. Publishing a release triggers the **Deploy to Elastic Beanstalk** workflow, which:
-   - Builds the frontend (`npm run build` in `frontend/`)
-   - Builds the backend JAR with the frontend embedded (`./mvnw clean package`)
-   - Deploys the JAR to AWS Elastic Beanstalk (`eu-north-1`, application `chorely`)
+    - Builds the frontend (`npm run build` in `frontend/`)
+    - Builds the backend JAR with the frontend embedded (`./mvnw clean package`)
+    - Deploys the JAR to AWS Elastic Beanstalk (`eu-north-1`, application `chorely`)
 
 ### Other workflows
 
@@ -109,7 +111,7 @@ This project uses [Release Please](https://github.com/googleapis/release-please)
 
 ### Application connects to wrong database
 
-If the application connects to `rewards_app_test` or another unexpected database, check your active Spring profile:
+If the application connects to `chorely_test` or another unexpected database, check your active Spring profile:
 
 ```bash
 echo $SPRING_PROFILES_ACTIVE
